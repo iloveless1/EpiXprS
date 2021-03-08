@@ -1,0 +1,80 @@
+#' This function predicts mRNA expression
+#'
+#' Using models previously constructed using TCGA reference data, mRNA
+#' expression is predicted using DNA methylation
+#'
+#' @param Cancer The type of cancer model to use for expression prediction
+#' @param x Matrix containing processed methylation M-values
+#' @param clinical Clinical data
+#' @return Matrix of imputed expression values
+#'
+EPI.Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
+                                   'LUAD','UCEC'),x = methy, clinical = clin){
+
+    if(!colnames(clin) %in% c('race','age','sex','ID'))
+        stop("Clinical data colnames must be 'ID','race','age', and 'sex'")
+
+    if(is.na(colnames(methy) %in% clin$ID))
+        stop('Clinical IDs must match methylation IDs must match')
+
+    if(!colnames(clin) %in% c('age','race_list'))
+        stop('age and race must be named "age" and "race_list"')
+
+    methy <- methy[,match(clin$ID,colnames(methy))]
+
+    EXP <- NULL
+    gene <- NULL
+
+
+    if(Cancer == 'PRAD'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/PRAD.rda"))
+        rt = PRAD
+    }else if (Cancer == 'BRCA'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/BRCA.rda"))
+        rt = BRCA
+    }else if (Cancer == 'COAD'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/COAD.rda"))
+        rt = COAD
+    }else if (Cancer == 'KIRP'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/KIRP.rda"))
+        rt = KIRP
+    }else if (Cancer == 'KIRC'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/KIRC.rda"))
+        rt = KIRC
+    }else if (Cancer == 'HNSC'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/HNSC.rda"))
+        rt = HNSC
+    }else if (Cancer == 'LUAD'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/LUAD.rda"))
+        rt = LUAD
+    }else if (Cancer == 'UCEC'){
+        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/UCEC.rda"))
+        rt = UCEC
+    } else{stop("Cancer must be one of ('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
+              'LUAD','UCEC')")}
+
+
+
+
+
+
+    mat <- as.matrix(rbind(methy,methy*clin$race_list,clin$race_list,clin$age))
+    rownames(mat)[(nrow(methy)+1):nrow(mat)] <- c(paste0(rownames(Methy),':Race')
+                                                  ,'race_list','age')
+
+
+    for(i in seq_along(nrow(rt))){
+        model <- rt[[i,1]][[1]]
+        predictors <- rbind(rep(1,ncol(mat)),mat[match(tmp1[2:nrow(model),1],rownames(mat)),])
+        covariates <- as.numeric(model[,2])
+        a <- exp(1)^colSums(predictors*covariates)
+        EXP <- rbind(EXP,a)
+        genes <- rt[[i,2]]
+        gene <- rbind(gene,genes)
+
+    }
+
+    rownames(EXP) <- gene$ensemlb_id
+    colnames(EXP) <- clin$ID
+    return(as.matrix(EXP))
+}

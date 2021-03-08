@@ -1,0 +1,30 @@
+---
+title: "EPIExPRS: A poly-CpG site approach to mRNA expression prediction and association"
+author: "Ian Loveless"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{EPIExPRS: A poly-CpG site approach to mRNA expression prediction and association}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+DNA methylation has been shown to be in important regulator of gene expression. 
+This relationship has been shown to jointly affected by many CpG sites in a 
+region, rather than by a single CpG site. The 'EPIxPRS' package provides a means
+for testing these multivariate associations, in a race-specific manner, but also
+methods for accounting for possible race-specifc effects in mixed-race 
+populations. 
+
+
+
+```{r setup}
+library(EPIExPRS)
+```
