@@ -44,23 +44,12 @@ EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
         stop('Number of samples in betas and clin must match')
 
     data("annotated_RNA")
-    if(array == '450K'){
-    methy_clin <-  IlluminaHumanMethylation450kanno.ilmn12.hg19::Other[
-        which(rownames(IlluminaHumanMethylation450kanno.ilmn12.hg19::Other) %in%
-                  rownames(x)),]
-    } else {
-    data("EPIC_Annotation")
-    methy_clin <- EPIC_Annotation
-    rm(EPIC_Annotation)
-    }
-
-
-            if(array == "EPIC") {
-                methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/
+    if(array == "EPIC") {
+        methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/
                                           InfiniumAnnotation/20180909/EPIC/
                                           EPIC.hg38.manifest.rds'))
-            } else {
-                methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/
+        } else {
+        methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/
                                           InfiniumAnnotation/20180909/HM450/
                                           HM450.hg38.manifest.rds'))
             }
