@@ -7,15 +7,21 @@
 EPI.Predict(
   Cancer = c("PRAD", "BRCA", "COAD", "KIRP", "KIRC", "HNSC", "LUAD", "UCEC"),
   x = methy,
-  clinical = clin
+  clinical = clin,
+  impute = TRUE,
+  beta = TRUE
 )
 }
 \arguments{
 \item{Cancer}{The type of cancer model to use for expression prediction}
 
-\item{x}{Matrix containing processed methylation M-values}
+\item{x}{Matrix containing processed methylation beta-values}
 
 \item{clinical}{Clinical data}
+
+\item{impute}{Whether or not to impute the data. Defaults to TRUE}
+
+\item{beta}{Whether methylation matrix is beta-values, defaults to TRUE}
 }
 \value{
 Matrix of imputed expression values

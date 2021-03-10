@@ -4,7 +4,7 @@
 #' in a multivariate context while adjusting for race. This function assumes
 #' that the variable 'race' is the final column in the matrix.
 #'
-#'
+#' @importFrom utils data
 #' @import stats
 #' @param x Processed DNA methylation with covariates. Race must be the final term
 #' @param y Raw expression count vector
@@ -20,7 +20,7 @@ Interact <- function(x,y,alpha,nfolds,clin.col){
              call. = FALSE)
     }
     tryCatch({
-        mat <- as.matrix(cbind(x[,seq(ncol(x)-clin.col)],x[,seq(ncol(c)-clin.col)]*x[,(ncol(x))],x[,(ncol(x)-(clin.col-1)):ncol(x)]))
+        mat <- as.matrix(cbind(x[,seq(ncol(x)-clin.col)],x[,seq(ncol(x)-clin.col)]*x[,(ncol(x))],x[,(ncol(x)-(clin.col-1)):ncol(x)]))
         colnames(mat)[(ncol(x)-1):(ncol(x)*2-(2*clin.col))] <- paste0(colnames(mat)[(ncol(x)-(clin.col - 1)):(ncol(x)*2-(2*clin.col))],':Race')
         whole.elastic.fit.cv <- glmnet::cv.glmnet(mat,as.matrix(t(y)) , family ='poisson', nfolds = nfolds,alpha=alpha,penalty.factor = c(rep(1, ncol(mat) - clin.col),0,0), parallel = FALSE )
         coef.min = stats::coef(whole.elastic.fit.cv, s = "lambda.min")

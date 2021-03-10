@@ -6,6 +6,7 @@
 #'
 #'
 #' @import stats
+#' @importFrom utils data
 #' @param x Processed DNA methylation with covariates. Race must be the final term
 #' @param y Raw expression count vector
 #' @param alpha Elastic net mixing penalty. Defaults to 0.5

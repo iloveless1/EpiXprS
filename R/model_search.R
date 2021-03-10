@@ -1,9 +1,10 @@
 #' Allows user to search provided models for CpG sites that are associated with
 #' expression of genes in any of the eight cancers
-#'
+#' @importFrom utils data
 #' @param features CpG sites to be identified in the model of choice
 #' @param Cancer The model to be searched for associated CpG sites
 #' @return data.frame containing all instance of CpG sites in models
+#' @export model_search
 
 model_search <- function(features, Cancer=c('PRAD','BRCA','COAD','KIRP','KIRC',
                                             'HNSC','LUAD','UCEC')){

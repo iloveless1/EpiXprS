@@ -1,10 +1,10 @@
 ---
-title: "EPIExPRS: A poly-CpG site approach to mRNA expression prediction and association"
+title: "EPIExPRS: A poly-CpG site approach to gene expression prediction and association"
 author: "Ian Loveless"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{EPIExPRS: A poly-CpG site approach to mRNA expression prediction and association}
+  %\VignetteIndexEntry{EPIExPRS: A poly-CpG site approach to gene expression prediction and association}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,13 +18,68 @@ knitr::opts_chunk$set(
 
 DNA methylation has been shown to be in important regulator of gene expression. 
 This relationship has been shown to jointly affected by many CpG sites in a 
-region, rather than by a single CpG site. The 'EPIxPRS' package provides a means
+region, rather than by a single CpG site. The 'EPIExPRS' package provides a means
 for testing these multivariate associations, in a race-specific manner, but also
-methods for accounting for possible race-specifc effects in mixed-race 
+methods for accounting for possible race-specific effects in mixed-race 
 populations. 
 
 
 
 ```{r setup}
 library(EPIExPRS)
+set.seed(1014)
+
+data("BRCA_Methy_Test", package = "EPIExPRS")
+data("BRCA_Clinical_Test", package = "EPIExPRS")
+data("BRCA_RNA_Test", package = "EPIExPRS")
+
+dim(BRCA_Methy_Test)
+BRCA_Methy_Test[1:5,1:5]
+
+dim(BRCA_Clinical_Test)
+head(BRCA_Clinical_Test)
+
+dim(BRCA_RNA_Test)
+BRCA_RNA_Test[1,1:5]
 ```
+
+The main functionality of this package is to allow one to associate many CpG 
+sites with gene expression, while accounting to possible race-specific effects. 
+This is managed by including dummy variables for the interactions between race
+and CpG sites in a penalized regression model. The function 'EPI.Construct()' 
+has three methods, 'Specific' which constructs models that ignore possible race-
+specific effects, 'Adjusted' where race is included in the model, and 'Interaction'
+where the aforementioned dummy variables are included as well. The function 
+returns 1) the prediction model, 2) the cross-validated predicted expression, 3)
+the percent of variability explained, 4) & 5) are race specific variability
+explained for the 'Adjusted' and 'Interaction' model types, and 6) ensembl
+annotation for the genes modeled. 
+
+```{r EPI.Construct Demonstration}
+out <- EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test, clinical = BRCA_Clinical_Test
+                          , method ='Interaction', dist = NULL, nfolds = NULL, 
+                          impute = FALSE, beta = FALSE, parallel = FALSE, array = '450K')
+
+rbind(head(out[1,1][[1]][[1]]),tail(out[1,1][[1]][[1]]))
+head(out[1,2][[1]][[1]])
+out[1,3][[1]]
+out[1,4][[1]]
+out[1,5][[1]]
+out[1,6][[1]]
+```
+
+Another useful function, 'model_search()', allows one to search through 
+pre-constructed models to identify gene models in which a given CpG is included.
+
+```{r model_search}
+model_search('cg21837192', Cancer = 'PRAD')
+```
+
+Similarly, pre-constructed models can be used to predict gene expression from a 
+450K DNA methylation data set, using the 'EPI.Predict()'. We advise missing DNA methylation be imputed,
+using the 'Imputation()' function borrowed from the 'methyLImp' package, to 
+provide complete predicted expression. For more details, see ?EPI.Predict. 
+
+Finally, a means is provided to associate predicted expression with a phenotype
+of interest, utilizing linear regression, logistic regression, and Cox 
+proportional hazards model. For more details see ?EPI.Assoc

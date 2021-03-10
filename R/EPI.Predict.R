@@ -3,13 +3,18 @@
 #' Using models previously constructed using TCGA reference data, mRNA
 #' expression is predicted using DNA methylation
 #'
+#' @importFrom utils data
 #' @param Cancer The type of cancer model to use for expression prediction
-#' @param x Matrix containing processed methylation M-values
+#' @param x Matrix containing processed methylation beta-values
 #' @param clinical Clinical data
 #' @return Matrix of imputed expression values
+#' @param impute Whether or not to impute the data. Defaults to TRUE
+#' @param beta Whether methylation matrix is beta-values, defaults to TRUE
+#' @export EPI.Predict
 #'
 EPI.Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
-                                   'LUAD','UCEC'),x = methy, clinical = clin){
+                                   'LUAD','UCEC'),x = methy, clinical = clin,
+                                    impute = TRUE, beta = TRUE){
 
     if(!colnames(clin) %in% c('race','age','sex','ID'))
         stop("Clinical data colnames must be 'ID','race','age', and 'sex'")
@@ -56,10 +61,17 @@ EPI.Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
 
 
 
+    if(isTRUE(impute)){
 
+        #####Impute missing methylation
+        Methy <- imputation(Methy, dist, methy_clin)
+    }
+    if(isTRUE(beta)){
+        Methy <- log2(Methy) - log2(1 - Methy)
+    }
 
-    mat <- as.matrix(rbind(methy,methy*clin$race_list,clin$race_list,clin$age))
-    rownames(mat)[(nrow(methy)+1):nrow(mat)] <- c(paste0(rownames(Methy),':Race')
+    mat <- as.matrix(rbind(Methy,Methy*clin$race_list,clin$race_list,clin$age))
+    rownames(mat)[(nrow(Methy)+1):nrow(mat)] <- c(paste0(rownames(Methy),':Race')
                                                   ,'race_list','age')
 
 

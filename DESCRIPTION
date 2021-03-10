@@ -1,14 +1,14 @@
 Package: EPIExPRS
-Title: Associates DNA Methylation with Matched mRNA eEpression
+Title: Associates DNA Methylation with Matched gene Expression
 Version: 0.99.5
 Authors@R: 
     person(given = "Ian",
            family = "Loveless",
            role = c("aut", "cre"),
            email = "ilovele1@hfhs.org")
-Description: Method to impute mRNA expression from DNA methylation in cancer.
+Description: Method to impute gene expression from DNA methylation in cancer.
     Imputed expression can be used to perform a mechanistic gene-based EWAS.
-    Functionality is also provided to associate DNA methylation with mRNA 
+    Functionality is also provided to associate DNA methylation with gene 
     expression in a multivariate environment on one's own data. 
 Depends: R (>= 4.0)
 License: MIT + file LICENSE
@@ -16,7 +16,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-biocViews: 	DNAMethylation, Microarray, Software, GeneExpression, 
+biocViews: DNAMethylation, Microarray, Software, GeneExpression, 
     GeneRegulation, Epigenetics
 Imports: 
     foreach,
@@ -24,8 +24,10 @@ Imports:
     survival,
     glmnet,
     stats,
-    Repitools
+    Repitools,
+    rlang,
+    devtools,
+    knitr
 Suggests: 
-    knitr,
     rmarkdown
 VignetteBuilder: knitr

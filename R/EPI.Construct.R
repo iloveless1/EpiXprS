@@ -6,7 +6,7 @@
 #' and include race interaction terms, and 'Specific' in which one can associate
 #' in a race-specific manner.
 #'
-#'
+#' @importFrom utils data
 #' @import glmnet
 #' @import foreach
 #' @import Repitools
@@ -22,6 +22,8 @@
 #' @param beta Whether methylation matrix is beta-values, defaults to TRUE
 #' @param array Methylation array type, 450k or EPIC, defaults to 450K
 #' @return Large list with upto 5 columns
+#'
+#' @export EPI.Construct
 
 
 EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
@@ -43,15 +45,11 @@ EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
     if(ncol(x) != nrow(clinical))
         stop('Number of samples in betas and clin must match')
 
-    data("annotated_RNA")
+    data("annotated_RNA", package = "EPIExPRS")
     if(array == "EPIC") {
-        methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/
-                                          InfiniumAnnotation/20180909/EPIC/
-                                          EPIC.hg38.manifest.rds'))
+        methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/InfiniumAnnotation/20180909/EPIC/EPIC.hg38.manifest.rds'))
         } else {
-        methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/
-                                          InfiniumAnnotation/20180909/HM450/
-                                          HM450.hg38.manifest.rds'))
+        methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/InfiniumAnnotation/20180909/HM450/HM450.hg38.manifest.rds'))
             }
     methy_clin <- annoGR2DF(methy_clin)
     methy_clin <- methy_clin[rownames(methy_clin) %in% rownames(x),
@@ -87,30 +85,8 @@ EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
     if(isTRUE(impute)){
 
     #####Impute missing methylation
-    missing <- rowSums(is.na(methy))
-
-    for(i in seq_len(length(missing))){
-        tryCatch({
-            if(missing[i]==0) next()
-
-            tmp <- methy_clin[i, ]
-
-            impute <- Methy[(methy_clin$chr == tmp$Chromosome & methy_clin$start
-                             <= tmp$Genomic_Coordinate+dist) &
-                                (methy_clin$chr == tmp$Chromosome &
-                                     methy_clin$start >=
-                                     tmp$Genomic_Coordinate-dist), ]
-
-            impute <- impute[rowSums(is.na(impute)) == 0 | rownames(impute)
-                             %in% rownames(tmp), ]
-
-            out <- Imputation(t(impute))
-            Methy[i,] <- out[ ,match(rownames(tmp),colnames(out))]
-        }, error=function(e){})
+    Methy <- imputation(Methy, dist, methy_clin)
     }
-    Methy <- ifelse(Methy == 1, 0.99, ifelse(Methy == 0, 0.01, Methy))
-    }
-
     if(isTRUE(beta)){
     Methy <- log2(Methy) - log2(1 - Methy)
     }
@@ -126,21 +102,14 @@ EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
 
         RNA_tmp <- counts[i, ]
 
-        methy_tmp <- Methy[(methy_clin$chr == tmp$chromosome_name &
-                                methy_clin$start <= tmp$end_position+dist) &
-                               (methy_clin$chr == tmp$chromosome_name &
-                                    methy_clin$start >=
-                                    tmp$start_position-dist), ]
+        methy_tmp <- Methy[(methy_clin$chr == tmp$chromosome_name & methy_clin$start <= tmp$end_position+dist) &
+                               (methy_clin$chr == tmp$chromosome_name & methy_clin$start >= tmp$start_position-dist), ]
 
-         clin_tmp <- methy_clin[(methy_clin$chr == tmp$chromosome_name &
-                                     methy_clin$start <= tmp$end_position+dist)
-                                & (methy_clin$chr == tmp$chromosome_name &
-                                       methy_clin$start
-                                   >= tmp$start_position-dist), ]
+         clin_tmp <- methy_clin[(methy_clin$chr == tmp$chromosome_name & methy_clin$start <= tmp$end_position+dist) &
+                                 (methy_clin$chr == tmp$chromosome_name & methy_clin$start >= tmp$start_position-dist), ]
         ###Complete Case Analysis
         data.whole <- cbind(as.matrix(t(methy_tmp)),clinical)
-        colnames(data.whole) <- c(colnames(as.matrix(t(methy_tmp))),
-                                  colnames(clinical))
+        colnames(data.whole) <- c(colnames(as.matrix(t(methy_tmp))), colnames(clinical))
         data.whole <- data.whole[, colSums(is.na(data.whole)) == 0]
         ####Run Elastic Net
         out = switch(method,
@@ -153,30 +122,24 @@ EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
                      )
         Whole[[1]] <- ifelse(length(out[1])==0,'EMPTY',out[1])
         Whole[[2]] <- ifelse(length(out[2])==0,'EMPTY',out[2])
-        Whole[[3]] <- ifelse(length(out[4])==0,'EMPTY',out[4]) ##### EA D2
-        Whole[[4]] <- ifelse(length(out[3])==0,'EMPTY',out[3]) ##### Complete D2
-        Whole[[5]] <- ifelse(length(out[5])==0,'EMPTY',out[5]) ##### AA D2
+        Whole[[3]] <- ifelse(length(out[4])==0,'EMPTY',out[4])
+        Whole[[4]] <- ifelse(length(out[3])==0,'EMPTY',out[3])
+        Whole[[5]] <- ifelse(length(out[5])==0,'EMPTY',out[5])
         Whole[[6]] <- annotated_RNA[i,]
         return(out)
-    }
+                 }
+    colnames(r) <- c('Model','cv Expression','Complete D2','EA D2','AA D2','Gene Annotation')
     return(r)
     } else {
         Whole <- matrix(list(),nrow(counts),6)
         for(i in seq_len(nrow(annotated_RNA))){
             tmp <- annotated_RNA[i,]
             RNA_tmp <- counts[i,]
-            methy_tmp <- Methy[(methy_clin$chr == tmp$chromosome_name
-                                & methy_clin$start <= tmp$end_position+dist)
-                               & (methy_clin$chr == tmp$chromosome_name
-                            & methy_clin$start >= tmp$start_position-dist),]
-            clin_tmp <- methy_clin[(methy_clin$chr == tmp$chromosome_name
-                                    & methy_clin$start <= tmp$end_position+dist)
-                                   & (methy_clin$chr == tmp$chromosome_name
-                                & methy_clin$start >= tmp$start_position-dist),]
+            methy_tmp <- Methy[(methy_clin$chr == tmp$chromosome_name & methy_clin$start <= tmp$end_position+dist) & (methy_clin$chr == tmp$chromosome_name & methy_clin$start >= tmp$start_position-dist),]
+            clin_tmp <- methy_clin[(methy_clin$chr == tmp$chromosome_name & methy_clin$start <= tmp$end_position+dist) & (methy_clin$chr == tmp$chromosome_name & methy_clin$start >= tmp$start_position-dist),]
             ###Complete Case Analysis
             data.whole <- cbind(as.matrix(t(methy_tmp)),clinical)
-            colnames(data.whole) <- c(colnames(as.matrix(t(methy_tmp))),
-                                      colnames(clinical))
+            colnames(data.whole) <- c(colnames(as.matrix(t(methy_tmp))), colnames(clinical))
             data.whole <- data.whole[, colSums(is.na(data.whole)) == 0]
             out = switch(method,
                          "Adjusted"=Adjust(data.whole,RNA_tmp,0.5,nfolds,
@@ -193,6 +156,7 @@ EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
             Whole[[i,5]] <- ifelse(length(out[5])==0, 'EMPTY', out[5])
             Whole[[i,6]] <- annotated_RNA[i, ]
         }
+        While <- c('Model','cv Expression','Complete D2','EA D2','AA D2','Gene Annotation')
         return(Whole)
     }
 }

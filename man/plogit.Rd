@@ -2,9 +2,16 @@
 % Please edit documentation in R/Imputation.R
 \name{plogit}
 \alias{plogit}
-\title{Impute DNA Methylation}
+\title{Back end imputation methods for DNA Methylation}
 \usage{
 plogit(x, min = 0, max = 1)
+}
+\arguments{
+\item{x}{Methylation Values}
+
+\item{min}{minimum value for imputation restriction}
+
+\item{max}{maximum value for imputation restriction}
 }
 \value{
 Matrix of imputed expression

@@ -2,7 +2,7 @@
 #'
 #' This function allows one to associate DNA methylation with matched mRNA expression
 #' in a multivariate context in race specific data.
-#'
+#' @importFrom utils data
 #' @import stats
 #' @param x Processed DNA methylation with covariates. Race must be the final term
 #' @param y Raw expression count vector
