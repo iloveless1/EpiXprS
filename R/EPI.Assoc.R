@@ -15,7 +15,7 @@
 #' @examples
 #' EPI.Assoc(EXP = EXP, type = logistic, clinical = cin)
 #'
-EPI.Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
+EPI_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
     if (!requireNamespace("survival", quietly = TRUE)) {
         stop("Package \"survival\" needed for this function to work. Please install it.",
              call. = FALSE)

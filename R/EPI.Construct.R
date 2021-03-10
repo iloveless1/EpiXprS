@@ -31,7 +31,7 @@
 #' Imputation = FALSE)
 
 
-EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
+EPI_Construct <- function(x = betas, y = counts, clinical = clin , method =
                               c('Adjusted', 'Interaction', 'Specific'),
                           dist = NULL, nfolds = NULL, impute = TRUE,
                           beta = TRUE, parallel = FALSE, array = '450K'){
