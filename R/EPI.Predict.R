@@ -10,6 +10,7 @@
 #' @return Matrix of imputed expression values
 #' @param impute Whether or not to impute the data. Defaults to TRUE
 #' @param beta Whether methylation matrix is beta-values, defaults to TRUE
+#' @param dist the distance from the TSS & TES in Kb. Defaults to 1,000,000Kb
 #' @export EPI.Predict
 #'
 #' @examples
@@ -17,18 +18,16 @@
 #'
 EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
                                    'LUAD','UCEC'),x = methy, clinical = clin,
-                                    impute = TRUE, beta = TRUE){
+                                    dist = NULL, impute = TRUE, beta = TRUE){
 
-    if(!colnames(clin) %in% c('race','age','sex','ID'))
-        stop("Clinical data colnames must be 'ID','race','age', and 'sex'")
+    if(!colnames(clin) %in% c('race','age','ID'))
+        stop("Clinical data colnames must be 'ID','race' and 'age'")
 
     if(is.na(colnames(methy) %in% clin$ID))
         stop('Clinical IDs must match methylation IDs must match')
 
     if(!colnames(clin) %in% c('age','race_list'))
         stop('age and race must be named "age" and "race_list"')
-
-    methy <- methy[,match(clin$ID,colnames(methy))]
 
     EXP <- NULL
     gene <- NULL
@@ -62,7 +61,9 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
               'LUAD','UCEC')")}
 
 
-
+    if(is.null(dist)){
+        dist <- 1000000
+    }
 
     if(isTRUE(impute)){
 
