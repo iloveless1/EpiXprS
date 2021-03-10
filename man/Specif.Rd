@@ -24,3 +24,7 @@ returns list of five elements for summarizing model construction
 This function allows one to associate DNA methylation with matched mRNA expression
 in a multivariate context in race specific data.
 }
+\examples{
+Specif(methy, counts, alpha = 0.5, nfolds = 10, clin.col = 3)
+
+}

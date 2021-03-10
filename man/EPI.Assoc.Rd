@@ -24,3 +24,7 @@ Data.frame with the association results for each gene
 This function takes the predicted expression from EPI_Predict and tests for
 associations with phenotype of interest.
 }
+\examples{
+EPI.Assoc(EXP = EXP, type = logistic, clinical = cin)
+
+}

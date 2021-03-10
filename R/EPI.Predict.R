@@ -12,6 +12,9 @@
 #' @param beta Whether methylation matrix is beta-values, defaults to TRUE
 #' @export EPI.Predict
 #'
+#' @examples
+#' EPI.Predict(Cancer = 'PRAD', x = methy, clinical = clin)
+#'
 EPI.Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
                                    'LUAD','UCEC'),x = methy, clinical = clin,
                                     impute = TRUE, beta = TRUE){

@@ -25,3 +25,6 @@ This function allows one to associate DNA methylation with matched mRNA expressi
 in a multivariate context while adjusting for race. This function assumes
 that the variable 'race' is the final column in the matrix.
 }
+\examples{
+Adjust(methy, counts, alpha = 0.5, nfolds = 10, clin.col = 3)
+}

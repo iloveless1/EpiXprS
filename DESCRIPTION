@@ -25,9 +25,8 @@ Imports:
     glmnet,
     stats,
     Repitools,
-    rlang,
-    devtools,
-    knitr
+    utils
 Suggests: 
-    rmarkdown
+    rmarkdown,
+    knitr
 VignetteBuilder: knitr

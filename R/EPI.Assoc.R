@@ -12,6 +12,9 @@
 #' @param clinical covariates to be included in the model. Phenotype to test must be in final column (final two for survival)
 #' @return Data.frame with the association results for each gene
 #' @export EPI.Assoc
+#' @examples
+#' EPI.Assoc(EXP = EXP, type = logistic, clinical = cin)
+#'
 EPI.Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
     if (!requireNamespace("survival", quietly = TRUE)) {
         stop("Package \"survival\" needed for this function to work. Please install it.",

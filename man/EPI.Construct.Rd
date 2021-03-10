@@ -48,3 +48,8 @@ one can adjust for race, 'Interaction' in which one can enforce a weak hierarchy
 and include race interaction terms, and 'Specific' in which one can associate
 in a race-specific manner.
 }
+\examples{
+EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
+clinical = BRCA_Clinical_Test, method = 'Interaction', beta = FALSE,
+Imputation = FALSE)
+}

@@ -13,7 +13,8 @@
 #' @param nfolds the number of folds to use for cross-validation
 #' @param clin.col the number of clinical covariates included
 #' @return returns list of five elements for summarizing model construction
-#'
+#' @examples
+#' Adjust(methy, counts, alpha = 0.5, nfolds = 10, clin.col = 3)
 
 
 

@@ -24,6 +24,11 @@
 #' @return Large list with upto 5 columns
 #'
 #' @export EPI.Construct
+#'
+#' @examples
+#' EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
+#' clinical = BRCA_Clinical_Test, method = 'Interaction', beta = FALSE,
+#' Imputation = FALSE)
 
 
 EPI.Construct <- function(x = betas, y = counts, clinical = clin , method =
