@@ -23,7 +23,7 @@ Interact <- function(x,y,alpha,nfolds,clin.col){
     }
     tryCatch({
         mat <- as.matrix(cbind(x[,seq(ncol(x)-clin.col)],x[,seq(ncol(x)-clin.col)]*x[,(ncol(x))],x[,(ncol(x)-(clin.col-1)):ncol(x)]))
-        colnames(mat)[(ncol(x)-1):(ncol(x)*2-(2*clin.col))] <- paste0(colnames(mat)[(ncol(x)-(clin.col - 1)):(ncol(x)*2-(2*clin.col))],':Race')
+        colnames(mat)[(ncol(x)-1):(ncol(x)*2-(2*clin.col))] <- paste0(colnames(mat)[(ncol(x)-(clin.col - 1)):(ncol(x)*2-(2*clin.col))],paste0(':',colnames(x)[ncol(x)]))
         whole.elastic.fit.cv <- glmnet::cv.glmnet(mat,as.matrix(t(y)) , family ='poisson', nfolds = nfolds,alpha=alpha,penalty.factor = c(rep(1, ncol(mat) - clin.col),0,0), parallel = FALSE )
         coef.min = stats::coef(whole.elastic.fit.cv, s = "lambda.min")
         active.min = which(as.numeric(coef.min) != 0)
