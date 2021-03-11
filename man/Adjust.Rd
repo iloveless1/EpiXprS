@@ -28,6 +28,6 @@ that the variable 'race' is the final column in the matrix.
 \examples{
 data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
 RNA_tmp <- rpois(50,15)
-Adjust(data.whole, RNA_tmp, alpha = 0.5, nfolds = 10, clin.col = 1)
+Adjust(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 1)
 
 }

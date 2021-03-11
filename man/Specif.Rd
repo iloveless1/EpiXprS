@@ -27,6 +27,6 @@ in a multivariate context in race specific data.
 \examples{
 data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
 RNA_tmp <- rpois(50,15)
-Specif(data.whole, RNA_tmp, alpha = 0.5, nfolds = 10, clin.col = 2)
+Specif(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 2)
 
 }
