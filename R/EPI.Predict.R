@@ -14,9 +14,11 @@
 #' @export EPI_Predict
 #'
 #' @examples
-#' \dontrun{
-#' EPI_Predict(Cancer = 'PRAD', x = methy, clinical = clin)
-#' }
+#' data(BRCA_Methy_Test)
+#' data(BRCA_Clinical_Test)
+#' EPI_Predict(Cancer = 'BRCA', x = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
+#' impute = FALSE, beta = FALSE)
+#'
 #'
 EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
                                    'LUAD','UCEC'),x = methy, clinical = clin,
