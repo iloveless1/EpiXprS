@@ -17,7 +17,7 @@
 #' data(BRCA_Methy_Test)
 #' data(BRCA_Clinical_Test)
 #' colnames(BRCA_Clinical_Test) <- c('age','race_list')
-#' EPI_Predict(Cancer = 'BRCA', x = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
+#' EPI_Predict(Cancer = 'BRCA', Methy = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
 #' impute = FALSE, beta = FALSE)
 #'
 #'
