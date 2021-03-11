@@ -42,8 +42,8 @@ Adjust <- function(x,y,alpha,nfolds,clin.col){
         tmp <- sample(seq(nfolds),nrow(x),replace=TRUE)
 
         for (i in seq(nfolds)){
-            xtrain <- mat[!tmp %in% i,]
-            xtest <- mat[tmp %in% i,]
+            xtrain <- x[!tmp %in% i,]
+            xtest <- x[tmp %in% i,]
             ytrain <- y[!tmp %in% i]
             ytest <- y[tmp %in% i]
             Whole.elastic.fit <- glmnet::cv.glmnet(xtrain,t(ytrain),
