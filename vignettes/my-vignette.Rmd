@@ -46,7 +46,7 @@ has three methods, 'Specific' which constructs models that ignore possible race-
 explained for the 'Adjusted' and 'Interaction' model types, and 6) ensembl annotation for the genes modeled. 
 
 ```{r EPI.Construct Demonstration}
-out <- EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test, clinical = BRCA_Clinical_Test
+out <- EPI_Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test, clinical = BRCA_Clinical_Test
                           , method ='Interaction', dist = NULL, nfolds = NULL, 
                           impute = FALSE, beta = FALSE, parallel = FALSE, array = '450K')
 
