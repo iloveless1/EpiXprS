@@ -14,10 +14,10 @@
 #' @param clin.col the number of clinical covariates included
 #' @return returns list of five elements for summarizing model construction
 #' @examples
-#' data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
-#' colnames(data.whole)[ncol(data.whole)] <- 'race'
+#' data.whole = cbind(matrix(rnorm(500),nrow=50),rbinom(50,1,0.5) ,rbinom(50,1,0.5))
+#' colnames(data.whole) <- c(1:10,'sex','race')
 #' RNA_tmp <- rpois(50,15)
-#' Interact(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 1)
+#' Interact(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 2)
 #'
 
 
@@ -28,7 +28,8 @@ Interact <- function(x,y,alpha,nfolds,clin.col){
     }
     tryCatch({
         mat <- as.matrix(cbind(x[,seq(ncol(x)-clin.col)],x[,seq(ncol(x)-clin.col)]*x[,(ncol(x))],x[,(ncol(x)-(clin.col-1)):ncol(x)]))
-        colnames(mat)[(ncol(x)-1):(ncol(x)*2-(2*clin.col))] <- paste0(colnames(mat)[(ncol(x)-(clin.col - 1)):(ncol(x)*2-(2*clin.col))],paste0(':',colnames(x)[ncol(x)]))
+        colnames(mat)[(ncol(x)-(clin.col-1)):(ncol(x)*2-(2*clin.col))] <- paste0(colnames(mat)[(ncol(x)-(clin.col - 1)):(ncol(x)*2-(2*clin.col))],paste0(':',colnames(x)[ncol(x)]))
+        colnames(mat)[c((ncol(mat)-(clin.col-1)):ncol(mat))] <- colnames(x)[c((ncol(x)-(clin.col-1)):ncol(x))]
         whole.elastic.fit.cv <- glmnet::cv.glmnet(mat,as.matrix(t(y)) , family ='poisson', nfolds = nfolds,alpha=alpha,penalty.factor = c(rep(1, ncol(mat) - clin.col),0,0), parallel = FALSE )
         coef.min = stats::coef(whole.elastic.fit.cv, s = "lambda.min")
         active.min = which(as.numeric(coef.min) != 0)
