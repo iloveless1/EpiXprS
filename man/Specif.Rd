@@ -25,7 +25,7 @@ This function allows one to associate DNA methylation with matched mRNA expressi
 in a multivariate context in race specific data.
 }
 \examples{
-data.whole = cbind(M1<-matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
+data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
 RNA_tmp <- rpois(50,15)
 Specif(data.whole, RNA_tmp, alpha = 0.5, nfolds = 10, clin.col = 2)
 
