@@ -73,14 +73,14 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
     if(isTRUE(beta)){
         Methy <- log2(Methy) - log2(1 - Methy)
     }
-    mat <- as.matrix(rbind(Methy,Methy*clinical$race_list,clininical$race_list,clinical$age))
+    mat <- as.matrix(rbind(Methy,Methy*clinical$race_list,clinical$race_list,clinical$age))
     rownames(mat)[(nrow(Methy)+1):nrow(mat)] <- c(paste0(rownames(Methy),':Race')
                                                   ,'race_list','age')
 
 
     for(i in seq_along(nrow(rt))){
         model <- rt[[i,1]][[1]]
-        predictors <- rbind(rep(1,ncol(mat)),mat[match(tmp1[2:nrow(model),1],rownames(mat)),])
+        predictors <- rbind(rep(1,ncol(mat)),mat[match(model[2:nrow(model),1],rownames(mat)),])
         covariates <- as.numeric(model[,2])
         a <- exp(1)^colSums(predictors*covariates)
         EXP <- rbind(EXP,a)
