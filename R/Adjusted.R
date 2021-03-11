@@ -89,6 +89,10 @@ Adjust <- function(x,y,alpha,nfolds,clin.col){
         c <- stats::median(ct, na.rm = TRUE)
         d <- stats::median(dt, na.rm = TRUE)
         f <- stats::median(et, na.rm = TRUE)
+        c <- ifelse(c < 0,0,c)
+        d <- ifelse(d < 0,0,d)
+        f <- ifelse(f < 0,0,f)
+
     }, error=function(e){})
     output <- list(a,b,c,d,f)
     return(output)

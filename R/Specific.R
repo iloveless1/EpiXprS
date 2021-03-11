@@ -64,6 +64,7 @@ Specif <- function(x,y,alpha,nfolds,clin.col){
 
         }
         c <- stats::median(ct, na.rm = TRUE)
+        c <- ifelse(c < 0,0,c)
     }, error=function(e){})
     output <- list(a,b,c)
     return(output)
