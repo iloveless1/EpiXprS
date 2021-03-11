@@ -14,7 +14,7 @@
 #' @examples
 #' data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
 #' RNA_tmp <- rpois(50,15)
-#' Specif(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 2)
+#' Specif(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 1)
 #'
 
 
@@ -25,7 +25,7 @@ Specif <- function(x,y,alpha,nfolds,clin.col){
              call. = FALSE)
     }
     tryCatch({
-        whole.elastic.fit.cv <- glmnet::cv.glmnet(x,as.matrix(t(y)) , family ='poisson', nfolds = nfolds,alpha=alpha,penalty.factor = c(rep(1, ncol(xtrain) - clin.col),0,0), parallel = FALSE )
+        whole.elastic.fit.cv <- glmnet::cv.glmnet(x,as.matrix(t(y)) , family ='poisson', nfolds = nfolds,alpha=alpha,penalty.factor = c(rep(1, ncol(x) - clin.col),0,0), parallel = FALSE )
         coef.min = stats::coef(whole.elastic.fit.cv, s = "lambda.min")
         active.min = which(as.numeric(coef.min) != 0)
         Whole.elastic = coef.min[active.min]
@@ -37,8 +37,8 @@ Specif <- function(x,y,alpha,nfolds,clin.col){
         tmp <- sample(seq(nfolds),nrow(x),replace=TRUE)
 
         for (i in seq(nfolds)){
-            xtrain <- mat[!tmp %in% i,]
-            xtest <- mat[tmp %in% i,]
+            xtrain <- x[!tmp %in% i,]
+            xtest <- x[tmp %in% i,]
             ytrain <- y[!tmp %in% i]
             ytest <- y[tmp %in% i]
 
