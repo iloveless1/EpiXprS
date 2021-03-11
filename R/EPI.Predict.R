@@ -25,7 +25,7 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
                                    'LUAD','UCEC'),x = methy, clinical = clin,
                                     dist = NULL, impute = TRUE, beta = TRUE){
 
-    if(!colnames(clinical) %in% c('age','race_list'))
+    if(sum(!c('age','race_list') %in% colnames(clinical))>0)
         stop('age and race must be named "age" and "race_list"')
 
     EXP <- NULL
