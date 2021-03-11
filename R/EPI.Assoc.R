@@ -14,8 +14,9 @@
 #' @export EPI_Assoc
 #' @examples
 #' EXP <- matrix(rpois(500,15),nrow = 50)
-#' clin <- rbinom(50,1,0.5)
-#' EPI_Assoc(EXP = EXP, type = 'logistic', clinical = cin)
+#' rownames(EXP) <- c(1:50)
+#' clin <- as.data.frame(rbinom(50,1,0.5))
+#' EPI_Assoc(EXP = EXP, type = 'logistic', clinical = clin)
 #'
 #'
 EPI_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
@@ -23,9 +24,7 @@ EPI_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clini
         stop("Package \"survival\" needed for this function to work. Please install it.",
              call. = FALSE)
     }
-    if(type == 'logistic' & nrow(unique(clin[,ncol(clin)])) >2){
-        stop("For model type logistic, phenotype must be binary")
-    }
+
         assoc_df <- NULL # Init association dataframe
         # Perform test between each pred_gene_exp column and phenotype
         EXP[is.infinite(EXP)] <- NA
@@ -34,6 +33,9 @@ EPI_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clini
             pred_gene_exp <- EXP[i,]
             merged <- as.data.frame(cbind(pred_gene_exp,clinical))
             if (type == "logistic") {
+                if((length(unique(merged[,ncol(merged)])) >2)){
+                    stop("For model type logistic, phenotype must be binary")
+                }
                 results <- summary(stats::glm(as.formula(paste(colnames(merged)[ncol(merged)]," ~ .")), data = merged, family = binomial,na.action = na.omit))$coefficients['pred_gene_exp', ]
             } else if (type == "linear") {
                 results <- summary(stats::lm(as.formula(paste(colnames(merged)[ncol(merged)]," ~ .")), data = merged,na.action = na.omit))$coefficients['pred_gene_exp', ]
