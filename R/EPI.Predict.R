@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' EPI.Predict(Cancer = 'PRAD', x = methy, clinical = clin)
+#' EPI_Predict(Cancer = 'PRAD', x = methy, clinical = clin)
 #' }
 #'
 EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',

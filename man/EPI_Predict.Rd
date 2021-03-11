@@ -35,7 +35,7 @@ expression is predicted using DNA methylation
 }
 \examples{
 \dontrun{
-EPI.Predict(Cancer = 'PRAD', x = methy, clinical = clin)
+EPI_Predict(Cancer = 'PRAD', x = methy, clinical = clin)
 }
 
 }

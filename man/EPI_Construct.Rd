@@ -58,7 +58,7 @@ dim(BRCA_Clinical_Test)
 head(BRCA_Clinical_Test)
 dim(BRCA_RNA_Test)
 BRCA_RNA_Test[1,1:5]
-EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
+EPI_Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
 clinical = BRCA_Clinical_Test, method = 'Interaction', beta = FALSE,
 impute = FALSE)
 

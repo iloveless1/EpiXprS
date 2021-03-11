@@ -25,8 +25,9 @@ This function takes the predicted expression from EPI_Predict and tests for
 associations with phenotype of interest.
 }
 \examples{
-\dontrun{
-EPI.Assoc(EXP = EXP, type = logistic, clinical = cin)
-}
+EXP <- matrix(rpois(500,15),nrow = 50)
+clin <- rbinom(50,1,0.5)
+EPI_Assoc(EXP = EXP, type = logistic, clinical = cin)
+
 
 }
