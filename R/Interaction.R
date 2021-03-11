@@ -6,6 +6,7 @@
 #'
 #' @importFrom utils data
 #' @import stats
+#' @export Interact
 #' @param x Processed DNA methylation with covariates. Race must be the final term
 #' @param y Raw expression count vector
 #' @param alpha Elastic net mixing penalty. Defaults to 0.5
@@ -13,9 +14,10 @@
 #' @param clin.col the number of clinical covariates included
 #' @return returns list of five elements for summarizing model construction
 #' @examples
-#' \dontrun{
-#' Interact(methy, counts, alpha = 0.5, nfolds = 10, clin.col = 3)
-#' }
+#' data.whole = cbind(M1<-matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
+#' RNA_tmp <- rpois(50,15)
+#' Interact(data.whole, RNA_tmp, alpha = 0.5, nfolds = 10, clin.col = 2)
+#'
 
 
 Interact <- function(x,y,alpha,nfolds,clin.col){

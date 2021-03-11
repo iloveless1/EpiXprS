@@ -5,6 +5,7 @@
 #' that the variable 'race' is the final column in the matrix.
 #'
 #'
+#' @export Adjust
 #' @import stats
 #' @importFrom utils data
 #' @param x Processed DNA methylation with covariates. Race must be the final term
@@ -14,9 +15,10 @@
 #' @param clin.col the number of clinical covariates included
 #' @return returns list of five elements for summarizing model construction
 #' @examples
-#' \dontrun{
-#' Adjust(methy, counts, alpha = 0.5, nfolds = 10, clin.col = 3)
-#' }
+#' data.whole = cbind(M1<-matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
+#' RNA_tmp <- rpois(50,15)
+#' Adjust(data.whole, RNA_tmp, alpha = 0.5, nfolds = 10, clin.col = 1)
+#'
 
 
 

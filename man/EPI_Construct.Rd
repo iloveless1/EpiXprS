@@ -49,9 +49,17 @@ and include race interaction terms, and 'Specific' in which one can associate
 in a race-specific manner.
 }
 \examples{
-\dontrun{
+data(BRCA_Methy_Test)
+data(BRCA_RNA_Test)
+data(BRCA_Clinical_Test)
+dim(BRCA_Methy_Test)
+BRCA_Methy_Test[1:5,1:5]
+dim(BRCA_Clinical_Test)
+head(BRCA_Clinical_Test)
+dim(BRCA_RNA_Test)
+BRCA_RNA_Test[1,1:5]
 EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
 clinical = BRCA_Clinical_Test, method = 'Interaction', beta = FALSE,
-Imputation = FALSE)
-}
+impute = FALSE)
+
 }
