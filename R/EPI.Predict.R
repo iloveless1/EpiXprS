@@ -17,6 +17,7 @@
 #' data(BRCA_Methy_Test)
 #' data(BRCA_Clinical_Test)
 #' colnames(BRCA_Clinical_Test) <- c('age','race_list')
+#' BRCA_Clinical_Test <- as.data.frame(BRCA_Clinical_Test)
 #' EPI_Predict(Cancer = 'BRCA', Methy = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
 #' impute = FALSE, beta = FALSE)
 #'
@@ -72,7 +73,6 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
     if(isTRUE(beta)){
         Methy <- log2(Methy) - log2(1 - Methy)
     }
-
     mat <- as.matrix(rbind(Methy,Methy*clinical$race_list,clininical$race_list,clinical$age))
     rownames(mat)[(nrow(Methy)+1):nrow(mat)] <- c(paste0(rownames(Methy),':Race')
                                                   ,'race_list','age')
