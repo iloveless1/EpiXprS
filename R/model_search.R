@@ -6,7 +6,9 @@
 #' @return data.frame containing all instance of CpG sites in models
 #' @export model_search
 #' @examples
+#' \dontrun{
 #' model_search('cg21837192', Cancer = 'PRAD')
+#' }
 
 model_search <- function(features, Cancer=c('PRAD','BRCA','COAD','KIRP','KIRC',
                                             'HNSC','LUAD','UCEC')){

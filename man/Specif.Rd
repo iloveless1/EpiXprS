@@ -25,6 +25,7 @@ This function allows one to associate DNA methylation with matched mRNA expressi
 in a multivariate context in race specific data.
 }
 \examples{
+\dontrun{
 Specif(methy, counts, alpha = 0.5, nfolds = 10, clin.col = 3)
-
+}
 }

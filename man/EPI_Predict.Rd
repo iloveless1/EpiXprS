@@ -34,6 +34,8 @@ Using models previously constructed using TCGA reference data, mRNA
 expression is predicted using DNA methylation
 }
 \examples{
+\dontrun{
 EPI.Predict(Cancer = 'PRAD', x = methy, clinical = clin)
+}
 
 }

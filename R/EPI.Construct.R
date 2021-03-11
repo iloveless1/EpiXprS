@@ -26,9 +26,11 @@
 #' @export EPI_Construct
 #'
 #' @examples
+#' \dontrun{
 #' EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
 #' clinical = BRCA_Clinical_Test, method = 'Interaction', beta = FALSE,
 #' Imputation = FALSE)
+#' }
 
 
 EPI_Construct <- function(x = betas, y = counts, clinical = clin , method =

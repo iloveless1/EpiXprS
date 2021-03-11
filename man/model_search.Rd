@@ -23,5 +23,7 @@ Allows user to search provided models for CpG sites that are associated with
 expression of genes in any of the eight cancers
 }
 \examples{
+\dontrun{
 model_search('cg21837192', Cancer = 'PRAD')
+}
 }

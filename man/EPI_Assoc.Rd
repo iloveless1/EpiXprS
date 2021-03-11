@@ -25,6 +25,8 @@ This function takes the predicted expression from EPI_Predict and tests for
 associations with phenotype of interest.
 }
 \examples{
+\dontrun{
 EPI.Assoc(EXP = EXP, type = logistic, clinical = cin)
+}
 
 }

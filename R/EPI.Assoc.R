@@ -13,7 +13,9 @@
 #' @return Data.frame with the association results for each gene
 #' @export EPI_Assoc
 #' @examples
+#' \dontrun{
 #' EPI.Assoc(EXP = EXP, type = logistic, clinical = cin)
+#' }
 #'
 EPI_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
     if (!requireNamespace("survival", quietly = TRUE)) {
