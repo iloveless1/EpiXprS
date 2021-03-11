@@ -25,9 +25,6 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
                                    'LUAD','UCEC'),x = methy, clinical = clin,
                                     dist = NULL, impute = TRUE, beta = TRUE){
 
-    if(!colnames(clinical) %in% c('race','age','ID'))
-        stop("Clinical data colnames must be 'ID','race' and 'age'")
-
     if(!colnames(clinical) %in% c('age','race_list'))
         stop('age and race must be named "age" and "race_list"')
 
