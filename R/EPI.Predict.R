@@ -25,13 +25,10 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
                                    'LUAD','UCEC'),x = methy, clinical = clin,
                                     dist = NULL, impute = TRUE, beta = TRUE){
 
-    if(!colnames(clin) %in% c('race','age','ID'))
+    if(!colnames(clinical) %in% c('race','age','ID'))
         stop("Clinical data colnames must be 'ID','race' and 'age'")
 
-    if(is.na(colnames(methy) %in% clin$ID))
-        stop('Clinical IDs must match methylation IDs must match')
-
-    if(!colnames(clin) %in% c('age','race_list'))
+    if(!colnames(clinical) %in% c('age','race_list'))
         stop('age and race must be named "age" and "race_list"')
 
     EXP <- NULL
@@ -96,6 +93,6 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
     }
 
     rownames(EXP) <- gene$ensemlb_id
-    colnames(EXP) <- clin$ID
+    colnames(EXP) <- colnames(mat)
     return(as.matrix(EXP))
 }
