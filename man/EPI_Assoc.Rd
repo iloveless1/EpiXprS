@@ -27,7 +27,7 @@ associations with phenotype of interest.
 \examples{
 EXP <- matrix(rpois(500,15),nrow = 50)
 clin <- rbinom(50,1,0.5)
-EPI_Assoc(EXP = EXP, type = logistic, clinical = cin)
+EPI_Assoc(EXP = EXP, type = 'logistic', clinical = cin)
 
 
 }
