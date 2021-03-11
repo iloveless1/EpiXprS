@@ -27,7 +27,8 @@ that the variable 'race' is the final column in the matrix.
 }
 \examples{
 data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
+colnames(data.whole)[ncol(data.whole)] <- 'race'
 RNA_tmp <- rpois(50,15)
-Interact(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 2)
+Interact(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 1)
 
 }
