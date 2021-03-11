@@ -5,7 +5,7 @@
 #'
 #' @importFrom utils data
 #' @param Cancer The type of cancer model to use for expression prediction
-#' @param x Matrix containing processed methylation beta-values
+#' @param Methy Matrix containing processed methylation beta-values
 #' @param clinical Clinical data
 #' @return Matrix of imputed expression values
 #' @param impute Whether or not to impute the data. Defaults to TRUE
@@ -22,7 +22,7 @@
 #'
 #'
 EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
-                                   'LUAD','UCEC'),x = methy, clinical = clin,
+                                   'LUAD','UCEC'), Methy = methy, clinical = clin,
                                     dist = NULL, impute = TRUE, beta = TRUE){
 
     if(sum(!c('age','race_list') %in% colnames(clinical))>0)

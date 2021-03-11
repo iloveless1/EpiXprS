@@ -6,7 +6,7 @@
 \usage{
 EPI_Predict(
   Cancer = c("PRAD", "BRCA", "COAD", "KIRP", "KIRC", "HNSC", "LUAD", "UCEC"),
-  x = methy,
+  Methy = methy,
   clinical = clin,
   dist = NULL,
   impute = TRUE,
@@ -16,7 +16,7 @@ EPI_Predict(
 \arguments{
 \item{Cancer}{The type of cancer model to use for expression prediction}
 
-\item{x}{Matrix containing processed methylation beta-values}
+\item{Methy}{Matrix containing processed methylation beta-values}
 
 \item{clinical}{Clinical data}
 
