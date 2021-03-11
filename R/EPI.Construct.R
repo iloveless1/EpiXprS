@@ -23,7 +23,7 @@
 #' @param array Methylation array type, 450k or EPIC, defaults to 450K
 #' @return Large list with upto 5 columns
 #'
-#' @export EPI.Construct
+#' @export EPI_Construct
 #'
 #' @examples
 #' EPI.Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,

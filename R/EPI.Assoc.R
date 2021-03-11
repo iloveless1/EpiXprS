@@ -11,7 +11,7 @@
 #' @param type Regression method for associating expression with a phenotype
 #' @param clinical covariates to be included in the model. Phenotype to test must be in final column (final two for survival)
 #' @return Data.frame with the association results for each gene
-#' @export EPI.Assoc
+#' @export EPI_Assoc
 #' @examples
 #' EPI.Assoc(EXP = EXP, type = logistic, clinical = cin)
 #'

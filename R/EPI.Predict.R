@@ -11,7 +11,7 @@
 #' @param impute Whether or not to impute the data. Defaults to TRUE
 #' @param beta Whether methylation matrix is beta-values, defaults to TRUE
 #' @param dist the distance from the TSS & TES in Kb. Defaults to 1,000,000Kb
-#' @export EPI.Predict
+#' @export EPI_Predict
 #'
 #' @examples
 #' EPI.Predict(Cancer = 'PRAD', x = methy, clinical = clin)
