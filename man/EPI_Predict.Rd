@@ -33,11 +33,3 @@ Matrix of imputed expression values
 Using models previously constructed using TCGA reference data, mRNA
 expression is predicted using DNA methylation
 }
-\examples{
-data(BRCA_Methy_Test)
-data(BRCA_Clinical_Test)
-EPI_Predict(Cancer = 'BRCA', x = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
-impute = FALSE, beta = FALSE)
-
-
-}
