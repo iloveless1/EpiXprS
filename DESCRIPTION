@@ -13,7 +13,6 @@ Description: Method to impute gene expression from DNA methylation in cancer.
 Depends: R (>= 4.1)
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 biocViews: DNAMethylation, Microarray, Software, GeneExpression, 
@@ -25,8 +24,7 @@ Imports:
     glmnet,
     stats,
     Repitools,
-    utils,
-    S4Vectors
+    utils
 Suggests: 
     rmarkdown,
     knitr

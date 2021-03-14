@@ -11,7 +11,6 @@
 #' @import foreach
 #' @import Repitools
 #' @import doParallel
-#' @import S4vectors
 #' @param x matrix of DNA methylation beta values. Can include missing values
 #' @param y matrix of raw mRNA counts
 #' @param clinical Data.frame conataing clinical covariates
