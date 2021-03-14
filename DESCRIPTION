@@ -1,6 +1,6 @@
 Package: EPIExPRS
 Title: Associates DNA Methylation with Matched gene Expression
-Version: 0.99.6
+Version: 0.99.7
 Authors@R: 
     person(given = "Ian",
            family = "Loveless",
