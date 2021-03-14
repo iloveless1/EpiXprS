@@ -25,7 +25,8 @@ Imports:
     glmnet,
     stats,
     Repitools,
-    utils
+    utils,
+    S4Vectors
 Suggests: 
     rmarkdown,
     knitr
