@@ -78,7 +78,7 @@ model_search('cg21837192', Cancer = 'PRAD')
 
 Similarly, pre-constructed models can be used to predict gene expression from a  450K DNA methylation data set, using the `methyl_Predict()` function. Prior to use, we advise missing DNA methylation be imputed using the `Imputation()` function. This function is borrowed from the `methyLImp` package, to provide complete predicted expression. For more details, see `?methyl_Predict`. 
 
-Finally, predicted expression scores from the `methyl_Predict()` function can be used to associate predicted expression with a phenotype of interest using the `EPI_Assoc` fuction. This function currently implements linear regression, logistic regression, and Cox proportional hazards models. For more details, see `?methyl_Assoc`.
+Finally, predicted expression scores from the `methyl_Predict()` function can be used to associate predicted expression with a phenotype of interest using the `methyl_Assoc` fuction. This function currently implements linear regression, logistic regression, and Cox proportional hazards models. For more details, see `?methyl_Assoc`.
 
 ```{r Session Information}
 sessionInfo()
