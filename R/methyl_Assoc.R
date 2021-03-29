@@ -11,15 +11,15 @@
 #' @param type Regression method for associating expression with a phenotype
 #' @param clinical covariates to be included in the model. Phenotype to test must be in final column (final two for survival)
 #' @return Data.frame with the association results for each gene
-#' @export EPI_Assoc
+#' @export methyl_Assoc
 #' @examples
 #' EXP <- matrix(rpois(500,15),nrow = 50)
 #' rownames(EXP) <- c(1:50)
 #' clin <- as.data.frame(rbinom(50,1,0.5))
-#' EPI_Assoc(EXP = EXP, type = 'logistic', clinical = clin)
+#' methyl_Assoc(EXP = EXP, type = 'logistic', clinical = clin)
 #'
 #'
-EPI_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
+methyl_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
     if (!requireNamespace("survival", quietly = TRUE)) {
         stop("Package \"survival\" needed for this function to work. Please install it.",
              call. = FALSE)

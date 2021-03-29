@@ -1,6 +1,6 @@
-Package: EPIExPRS
+Package: methylXprs
 Title: Associates DNA Methylation with Matched gene Expression
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: 
     person(given = "Ian",
            family = "Loveless",
@@ -10,7 +10,7 @@ Description: Method to impute gene expression from DNA methylation in cancer.
     Imputed expression can be used to perform a mechanistic gene-based EWAS.
     Functionality is also provided to associate DNA methylation with gene 
     expression in a multivariate environment on one's own data. 
-Depends: R (>= 4.1)
+Depends: R (>= 4.0.2)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

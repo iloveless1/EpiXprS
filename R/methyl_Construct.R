@@ -23,7 +23,7 @@
 #' @param array Methylation array type, 450k or EPIC, defaults to 450K
 #' @return Large list with upto 5 columns
 #'
-#' @export EPI_Construct
+#' @export methyl_Construct
 #'
 #' @examples
 #' data(BRCA_Methy_Test)
@@ -35,13 +35,13 @@
 #' head(BRCA_Clinical_Test)
 #' dim(BRCA_RNA_Test)
 #' BRCA_RNA_Test[1,1:5]
-#' EPI_Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
+#' methyl_Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
 #' clinical = BRCA_Clinical_Test, method = 'Interaction', beta = FALSE,
 #' impute = FALSE)
 #'
 
 
-EPI_Construct <- function(x = betas, y = counts, clinical = clin , method =
+methyl_Construct <- function(x = betas, y = counts, clinical = clin , method =
                               c('Adjusted', 'Interaction', 'Specific'),
                           dist = NULL, nfolds = NULL, impute = TRUE,
                           beta = TRUE, parallel = FALSE, array = '450K'){

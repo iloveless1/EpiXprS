@@ -11,18 +11,18 @@
 #' @param impute Whether or not to impute the data. Defaults to TRUE
 #' @param beta Whether methylation matrix is beta-values, defaults to TRUE
 #' @param dist the distance from the TSS & TES in Kb. Defaults to 1,000,000Kb
-#' @export EPI_Predict
+#' @export methyl_Predict
 #'
 #' @examples
 #' data(BRCA_Methy_Test)
 #' data(BRCA_Clinical_Test)
 #' colnames(BRCA_Clinical_Test) <- c('age','race_list')
 #' BRCA_Clinical_Test <- as.data.frame(BRCA_Clinical_Test)
-#' EPI_Predict(Cancer = 'BRCA', Methy = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
+#' methyl_Predict(Cancer = 'BRCA', Methy = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
 #' impute = FALSE, beta = FALSE)
 #'
 #'
-EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
+methyl_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
                                    'LUAD','UCEC'), Methy = methy, clinical = clin,
                                     dist = NULL, impute = TRUE, beta = TRUE){
 
@@ -59,7 +59,6 @@ EPI_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
         rt = UCEC
     } else{stop("Cancer must be one of ('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
               'LUAD','UCEC')")}
-
 
     if(is.null(dist)){
         dist <- 1000000
