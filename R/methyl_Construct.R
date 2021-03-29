@@ -60,7 +60,7 @@ methyl_Construct <- function(x = betas, y = counts, clinical = clin , method =
     if(ncol(x) != nrow(clinical))
         stop('Number of samples in betas and clin must match')
 
-    data("annotated_RNA", package = "EPIExPRS")
+    data("annotated_RNA", package = "methylXprs")
     if(array == "EPIC") {
         methy_clin <- readRDS(url('https://zwdzwd.s3.amazonaws.com/InfiniumAnnotation/20180909/EPIC/EPIC.hg38.manifest.rds'))
         } else {

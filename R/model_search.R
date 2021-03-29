@@ -13,28 +13,28 @@ model_search <- function(features, Cancer=c('PRAD','BRCA','COAD','KIRP','KIRC',
                                             'HNSC','LUAD','UCEC')){
 
     if(Cancer == 'PRAD'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/PRAD.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/PRAD.rda"))
         rt = PRAD
     }else if (Cancer == 'BRCA'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/BRCA.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/BRCA.rda"))
         rt = BRCA
     }else if (Cancer == 'COAD'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/COAD.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/COAD.rda"))
         rt = COAD
     }else if (Cancer == 'KIRP'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/KIRP.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/KIRP.rda"))
         rt = KIRP
     }else if (Cancer == 'KIRC'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/KIRC.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/KIRC.rda"))
         rt = KIRC
     }else if (Cancer == 'HNSC'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/HNSC.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/HNSC.rda"))
         rt = HNSC
     }else if (Cancer == 'LUAD'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/LUAD.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/LUAD.rda"))
         rt = LUAD
     }else if (Cancer == 'UCEC'){
-        load(url("https://github.com/iloveless1/EPIExPRS-Data/raw/main/UCEC.rda"))
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/UCEC.rda"))
         rt = UCEC
     } else{stop("Cancer must be one of ('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
               'LUAD','UCEC')")}

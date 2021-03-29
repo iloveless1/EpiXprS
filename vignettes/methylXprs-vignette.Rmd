@@ -58,8 +58,8 @@ has three methods, `Specific` which constructs models that ignore possible race-
 explained for the `Adjusted` and `Interaction` model types, and 6) ensembl annotation for the genes modeled. 
 
 ```{r methyl_Construct Demonstration}
-out <- methyl_Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test, clinical = BRCA_Clinical_Test
-                          , method ='Interaction', dist = NULL, nfolds = NULL, 
+out <- methyl_Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test, clinical = BRCA_Clinical_Test,
+                           method ='Interaction', dist = NULL, nfolds = NULL, 
                           impute = FALSE, beta = FALSE, parallel = FALSE, array = '450K')
 
 rbind(head(out[1,1][[1]][[1]]),tail(out[1,1][[1]][[1]]))
