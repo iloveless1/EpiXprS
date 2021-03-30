@@ -57,7 +57,7 @@ The main functionality of this package is to allow one to associate many CpG sit
 has three methods, `Specific` which constructs models that ignore possible race-specific effects, `Adjusted` where race is included in the model, and `Interaction` where the aforementioned multiplicative interaction terms are included as well. The function returns 1) the prediction model, 2) the cross-validated predicted expression, 3) the percent of variability explained, 4) & 5) the race specific variability
 explained for the `Adjusted` and `Interaction` model types, and 6) ensembl annotation for the genes modeled. 
 
-```{r methyl_Construct Demonstration}
+```{r methyl_Construct Demonstration, eval = FALSE}
 out <- methyl_Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test, clinical = BRCA_Clinical_Test,
                            method ='Interaction', dist = NULL, nfolds = NULL, 
                           impute = FALSE, beta = FALSE, parallel = FALSE, array = '450K')
@@ -72,7 +72,7 @@ out[1,6][[1]]
 
 Another useful function, `model_search()`, allows one to search through pre-constructed models to identify gene models in which a given CpG is included.
 
-```{r model_search}
+```{r model_search, eval = FALSE}
 model_search('cg21837192', Cancer = 'PRAD')
 ```
 
