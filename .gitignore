@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-.Rproj.user
-inst/doc
-EPIExPRS.Rproj
-.Rhistory
-=======
 .Rproj.user
 inst/doc
 methylXprs.Rproj
 .Rhistory
->>>>>>> origin/master
+
