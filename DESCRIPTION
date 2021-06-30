@@ -1,6 +1,6 @@
 Package: methylXprs
 Title: Associates DNA Methylation with Matched gene Expression
-Version: 0.99.3
+Version: 0.99.4
 Authors@R: 
     person(given = "Ian",
            family = "Loveless",
