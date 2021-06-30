@@ -1,6 +1,6 @@
-Package: methylXprs
+Package: EpiXprS
 Title: Associates DNA Methylation with Matched gene Expression
-Version: 0.99.2
+Version: 0.99.4
 Authors@R: 
     person(given = "Ian",
            family = "Loveless",
@@ -24,8 +24,12 @@ Imports:
     glmnet,
     stats,
     Repitools,
-    utils
+    utils,
+    stringr,
+    AnnotationHub,
+    ExperimentHub
 Suggests: 
     rmarkdown,
-    knitr
+    knitr,
+    markdown
 VignetteBuilder: knitr

@@ -4,14 +4,16 @@
 #' in a multivariate context in race specific data.
 #' @importFrom utils data
 #' @import stats
-#' @export Specif
+#' @export Specific
 #' @param x Processed DNA methylation with covariates. Race must be the final term
 #' @param y Raw expression count vector
 #' @param alpha Elastic net mixing penalty. Defaults to 0.5
 #' @param nfolds the number of folds to use for cross-validation
 #' @param clin.col the number of clinical covariates included
-#' @return returns list of five elements for summarizing model construction
-#' @examples
+#' @return returns list of three elements for summarizing model construction. 
+#' \code{Model} is the predicted model for the gene. \code{Predicted.Expression}
+#' is the Cross-validated predicted expression. \code{Overall.D2} The prediction
+#'  accuracy for the model. 
 #' data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
 #' RNA_tmp <- rpois(50,15)
 #' Specif(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 1)
@@ -19,7 +21,7 @@
 
 
 
-Specif <- function(x,y,alpha,nfolds,clin.col){
+Specific <- function(x,y,alpha,nfolds,clin.col){
     if (!requireNamespace("glmnet", quietly = TRUE)) {
         stop("Package \"glmnet\" needed for this function to work. Please install it.",
              call. = FALSE)
@@ -37,21 +39,17 @@ Specif <- function(x,y,alpha,nfolds,clin.col){
         tmp <- sample(seq(nfolds),nrow(x),replace=TRUE)
 
         for (i in seq(nfolds)){
-            xtrain <- x[!tmp %in% i,]
-            xtest <- x[tmp %in% i,]
-            ytrain <- y[!tmp %in% i]
-            ytest <- y[tmp %in% i]
 
 
-            Whole.elastic.fit <- glmnet::cv.glmnet(xtrain,t(ytrain), family='poisson', nfolds = nfolds,alpha = alpha,penalty.factor = c(rep(1, ncol(xtrain) - clin.col),0,0))
+            Whole.elastic.fit <- glmnet::cv.glmnet(x[!tmp %in% i,],t(y[!tmp %in% i]), family='poisson', nfolds = nfolds,alpha = alpha,penalty.factor = c(rep(1, ncol(x[!tmp %in% i,]) - clin.col),0,0))
             coef.min = stats::coef(whole.elastic.fit.cv, s = "lambda.min")
 
-            out <- predict(Whole.elastic.fit, xtest, s=Whole.elastic.fit$lambda.min, type = 'response', gamma=0.5)
-            rownames(out) <- rownames(xtest)
+            out <- predict(Whole.elastic.fit, x[tmp %in% i,], s=Whole.elastic.fit$lambda.min, type = 'response', gamma=0.5)
+            rownames(out) <- rownames(x[tmp %in% i,])
             out <- round(out)
             b <- rbind(b,out)
 
-            y_i <- as.numeric(ytest)
+            y_i <- as.numeric(y[tmp %in% i])
             u_i <- out
 
             deviance.contribs <- ifelse(y_i == 0, 0, (y_i * log(y_i/u_i))) - (y_i - u_i)
@@ -63,10 +61,9 @@ Specif <- function(x,y,alpha,nfolds,clin.col){
             ct[i] <- (1-D/Dn)
 
         }
-        c <- stats::median(ct, na.rm = TRUE)
-        c <- ifelse(c < 0,0,c)
+        c <- ifelse(stats::median(ct, na.rm = TRUE) < 0,0,stats::median(ct, na.rm = TRUE))
     }, error=function(e){})
-    output <- list(a,b,c)
+    output <- list('Model' = a, 'Predicted.Expression' = b, 'Overall.D2' = c)
     return(output)
 }
 

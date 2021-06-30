@@ -13,6 +13,18 @@
 #'
 "annotated_RNA"
 
+
+
+
+#' @name TestData
+#' @title Test data for EpiXprS functionality
+#' @docType data
+#' @description
+#' Test data consisting of expression counts for TSPAN6 from the TCGA-BRCA
+#' study as well as methylation M-values and clinical data for the patients.
+#' @keywords data
+"TestData"
+
 #' BRCA_Methy_Test.
 #'
 #'

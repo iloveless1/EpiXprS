@@ -133,19 +133,19 @@ methyLImp <- function(dat, min = 0, max = 1, max.sv = NULL, col.list = NULL)
 #' @return Methy Matrix with complete DNA methylation
 #' @export imputation
 
-imputation <- function(methy = methy, dist = dist, methy_clin = methy_clin){
+imputation <- function(methy = methy, dist = dist, Methylation.Annotation = Methylation.Annotation){
 missing <- rowSums(is.na(methy))
 
 for(i in seq_len(length(missing))){
     tryCatch({
         if(missing[i]==0) next()
 
-        tmp <- methy_clin[i, ]
+        tmp <- Methylation.Annotation[i]
 
-        impute <- Methy[(methy_clin$chr == tmp$Chromosome & methy_clin$start
-                         <= tmp$Genomic_Coordinate+dist) &
-                            (methy_clin$chr == tmp$Chromosome &
-                                 methy_clin$start >= tmp$Genomic_Coordinate-dist), ]
+        impute <- Methy[(seqnames(Methylation.Annotation) == seqnames(tmp) & start(Methylation.Annotation)
+                         <= start(tmp) +dist) &
+                            (seqnames(Methylation.Annotation) == seqnames(tmp) & start(Methylation.Annotation)
+                             >= start(tmp) -dist) ]
 
         impute <- impute[rowSums(is.na(impute)) == 0 | rownames(impute) %in% rownames(tmp), ]
 

@@ -13,7 +13,12 @@
 #' @param alpha Elastic net mixing penalty. Defaults to 0.5
 #' @param nfolds the number of folds to use for cross-validation
 #' @param clin.col the number of clinical covariates included
-#' @return returns list of five elements for summarizing model construction
+#' @return returns list of five elements for summarizing model construction. 
+#' \code{Model} is the predicted model for the gene. \code{Predicted.Expression}
+#' is the Cross-validated predicted expression. \code{Overall.D2} The prediction
+#'  accuracy for the adjusted model. \code{Class1.D2} is the prediction accuracy
+#'  for the reference class. \code{Class2.D2} is the prediction accuracy for the 
+#'  non-reference class. 
 #' @examples
 #' data.whole = cbind(matrix(rnorm(500),nrow=50), rbinom(50,1,0.5))
 #' RNA_tmp <- rpois(50,15)
@@ -42,20 +47,17 @@ Adjust <- function(x,y,alpha,nfolds,clin.col){
         tmp <- sample(seq(nfolds),nrow(x),replace=TRUE)
 
         for (i in seq(nfolds)){
-            xtrain <- x[!tmp %in% i,]
-            xtest <- x[tmp %in% i,]
-            ytrain <- y[!tmp %in% i]
-            ytest <- y[tmp %in% i]
-            Whole.elastic.fit <- glmnet::cv.glmnet(xtrain,t(ytrain),
+            
+            Whole.elastic.fit <- glmnet::cv.glmnet(x[!tmp %in% i,],t(y[!tmp %in% i]),
             family='poisson', nfolds = nfolds,alpha = alpha,penalty.factor =
-            c(rep(1, ncol(xtrain) - 2),0,0))
+            c(rep(1, ncol(x[!tmp %in% i,]) - 2),0,0))
             coef.min = stats::coef(whole.elastic.fit.cv, s = "lambda.min")
-            out <- predict(Whole.elastic.fit, xtest,
+            out <- predict(Whole.elastic.fit, x[tmp %in% i,],
             s=Whole.elastic.fit$lambda.min, type = 'response', gamma=0.5)
-            rownames(out) <- rownames(xtest)
+            rownames(out) <- rownames(x[tmp %in% i,])
             out <- round(out)
             b <- rbind(b,out)
-            y_i <- as.numeric(ytest)
+            y_i <- as.numeric(y[tmp %in% i])
             u_i <- out
             deviance.contribs <- ifelse(y_i == 0, 0,
             (y_i * log(y_i/u_i))) - (y_i - u_i)
@@ -65,8 +67,8 @@ Adjust <- function(x,y,alpha,nfolds,clin.col){
             (y_i * log(y_i/u_i))) - (y_i - u_i)
             Dn <- 2 * sum(deviance.contribs)
             ct[i] <- (1-D/Dn)
-            y_i <- as.numeric(ytest)[xtest[,(ncol(xtest))] == 1]
-            u_i <- out[xtest[,(ncol(xtest))] == 1]
+            y_i <- as.numeric(y[tmp %in% i])[x[tmp %in% i,][,(ncol(x[tmp %in% i,]))] == 1]
+            u_i <- out[x[tmp %in% i,][,(ncol(x[tmp %in% i,]))] == 1]
             deviance.contribs <- ifelse(y_i == 0, 0,
             (y_i * log(y_i/u_i))) - (y_i - u_i)
             D <- 2 * sum(deviance.contribs)
@@ -75,8 +77,8 @@ Adjust <- function(x,y,alpha,nfolds,clin.col){
             (y_i * log(y_i/u_i))) - (y_i - u_i)
             Dn <- 2 * sum(deviance.contribs)
             dt[i] <- (1-D/Dn)
-            y_i <- as.numeric(ytest)[xtest[,(ncol(xtest))] == 0]
-            u_i <- out[xtest[,(ncol(xtest))] == 0]
+            y_i <- as.numeric(y[tmp %in% i])[x[tmp %in% i,][,(ncol(x[tmp %in% i,]))] == 0]
+            u_i <- out[x[tmp %in% i,][,(ncol(x[tmp %in% i,]))] == 0]
             deviance.contribs <- ifelse(y_i == 0, 0,
             (y_i * log(y_i/u_i))) - (y_i - u_i)
             D <- 2 * sum(deviance.contribs)
@@ -86,15 +88,12 @@ Adjust <- function(x,y,alpha,nfolds,clin.col){
             Dn <- 2 * sum(deviance.contribs)
             et[i] <- (1-D/Dn)
         }
-        c <- stats::median(ct, na.rm = TRUE)
-        d <- stats::median(dt, na.rm = TRUE)
-        f <- stats::median(et, na.rm = TRUE)
-        c <- ifelse(c < 0,0,c)
-        d <- ifelse(d < 0,0,d)
-        f <- ifelse(f < 0,0,f)
+        c <- ifelse(stats::median(ct, na.rm = TRUE) < 0,0,stats::median(ct, na.rm = TRUE))
+        d <- ifelse(stats::median(dt, na.rm = TRUE) < 0,0,stats::median(dt, na.rm = TRUE))
+        f <- ifelse(stats::median(ft, na.rm = TRUE) < 0,0,stats::median(ft, na.rm = TRUE))
 
     }, error=function(e){})
-    output <- list(a,b,c,d,f)
+    output <- list('Model' = a, 'Predicted.Expression' = b, 'Overall.D2' = c, 'Class1.D2' = d, 'Class2.D2' = f)
     return(output)
 }
 
