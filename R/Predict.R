@@ -4,25 +4,42 @@
 #' expression is predicted using DNA methylation
 #'
 #' @importFrom utils data
+<<<<<<< HEAD:R/Predict.R
 #' @param Cancer ExperimentHub object cancer model
+=======
+#' @param Cancer The type of cancer model to use for expression prediction
+>>>>>>> upstream/master:R/methyl_Predict.R
 #' @param Methy Matrix containing processed methylation beta-values
 #' @param clinical Clinical data
 #' @return Matrix of imputed expression values
 #' @param impute Whether or not to impute the data. Defaults to TRUE
 #' @param beta Whether methylation matrix is beta-values, defaults to TRUE
 #' @param dist the distance from the TSS & TES in Kb. Defaults to 1,000,000Kb
+<<<<<<< HEAD:R/Predict.R
 #' @export Predict
+=======
+#' @export methyl_Predict
+>>>>>>> upstream/master:R/methyl_Predict.R
 #'
 #' @examples
 #' data(BRCA_Methy_Test)
 #' data(BRCA_Clinical_Test)
 #' colnames(BRCA_Clinical_Test) <- c('age','race_list')
 #' BRCA_Clinical_Test <- as.data.frame(BRCA_Clinical_Test)
+<<<<<<< HEAD:R/Predict.R
 #' Predict(Cancer = 'BRCA', Methy = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
 #' impute = FALSE, beta = FALSE)
 #'
 #'
 Predict <- function(Cancer = object, Methy = methy, clinical = clin,
+=======
+#' methyl_Predict(Cancer = 'BRCA', Methy = BRCA_Methy_Test, clinical = BRCA_Clinical_Test,
+#' impute = FALSE, beta = FALSE)
+#'
+#'
+methyl_Predict <- function(Cancer = c('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
+                                   'LUAD','UCEC'), Methy = methy, clinical = clin,
+>>>>>>> upstream/master:R/methyl_Predict.R
                                     dist = NULL, impute = TRUE, beta = TRUE){
 
     if(sum(!c('age','race_list') %in% colnames(clinical))>0)
@@ -31,6 +48,37 @@ Predict <- function(Cancer = object, Methy = methy, clinical = clin,
     EXP <- NULL
     gene <- NULL
 
+<<<<<<< HEAD:R/Predict.R
+=======
+
+    if(Cancer == 'PRAD'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/PRAD.rda"))
+        rt = PRAD
+    }else if (Cancer == 'BRCA'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/BRCA.rda"))
+        rt = BRCA
+    }else if (Cancer == 'COAD'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/COAD.rda"))
+        rt = COAD
+    }else if (Cancer == 'KIRP'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/KIRP.rda"))
+        rt = KIRP
+    }else if (Cancer == 'KIRC'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/KIRC.rda"))
+        rt = KIRC
+    }else if (Cancer == 'HNSC'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/HNSC.rda"))
+        rt = HNSC
+    }else if (Cancer == 'LUAD'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/LUAD.rda"))
+        rt = LUAD
+    }else if (Cancer == 'UCEC'){
+        load(url("https://github.com/iloveless1/methylXprs-Data/raw/main/UCEC.rda"))
+        rt = UCEC
+    } else{stop("Cancer must be one of ('PRAD','BRCA','COAD','KIRP','KIRC','HNSC',
+              'LUAD','UCEC')")}
+
+>>>>>>> upstream/master:R/methyl_Predict.R
     if(is.null(dist)){
         dist <- 1000000
     }
@@ -49,7 +97,11 @@ Predict <- function(Cancer = object, Methy = methy, clinical = clin,
 
 
     for(i in seq_along(nrow(rt))){
+<<<<<<< HEAD:R/Predict.R
         model <- Cancer[[i,1]][[1]]
+=======
+        model <- rt[[i,1]][[1]]
+>>>>>>> upstream/master:R/methyl_Predict.R
         predictors <- rbind(rep(1,ncol(mat)),mat[match(model[2:nrow(model),1],rownames(mat)),])
         covariates <- as.numeric(model[,2])
         a <- exp(1)^colSums(predictors*covariates)

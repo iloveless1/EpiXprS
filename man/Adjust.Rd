@@ -18,12 +18,16 @@ Adjust(x, y, alpha, nfolds, clin.col)
 \item{clin.col}{the number of clinical covariates included}
 }
 \value{
+<<<<<<< HEAD
 returns list of five elements for summarizing model construction.
 \code{Model} is the predicted model for the gene. \code{Predicted.Expression}
 is the Cross-validated predicted expression. \code{Overall.D2} The prediction
 accuracy for the adjusted model. \code{Class1.D2} is the prediction accuracy
 for the reference class. \code{Class2.D2} is the prediction accuracy for the
 non-reference class.
+=======
+returns list of five elements for summarizing model construction
+>>>>>>> upstream/master
 }
 \description{
 This function allows one to associate DNA methylation with matched mRNA expression

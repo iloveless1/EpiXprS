@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 Package: EpiXprS
+=======
+Package: methylXprs
+>>>>>>> upstream/master
 Title: Associates DNA Methylation with Matched gene Expression
 Version: 0.99.4
 Authors@R: 
@@ -24,6 +28,7 @@ Imports:
     glmnet,
     stats,
     Repitools,
+<<<<<<< HEAD
     utils,
     stringr,
     AnnotationHub,
@@ -32,4 +37,10 @@ Suggests:
     rmarkdown,
     knitr,
     markdown
+=======
+    utils
+Suggests: 
+    rmarkdown,
+    knitr
+>>>>>>> upstream/master
 VignetteBuilder: knitr

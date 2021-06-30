@@ -11,15 +11,26 @@
 #' @param type Regression method for associating expression with a phenotype
 #' @param clinical covariates to be included in the model. Phenotype to test must be in final column (final two for survival)
 #' @return Data.frame with the association results for each gene
+<<<<<<< HEAD:R/Assoc.R
 #' @export Assoc
+=======
+#' @export methyl_Assoc
+>>>>>>> upstream/master:R/methyl_Assoc.R
 #' @examples
 #' EXP <- matrix(rpois(500,15),nrow = 50)
 #' rownames(EXP) <- c(1:50)
 #' clin <- as.data.frame(rbinom(50,1,0.5))
+<<<<<<< HEAD:R/Assoc.R
 #' Assoc(EXP = EXP, type = 'logistic', clinical = clin)
 #'
 #'
 Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
+=======
+#' methyl_Assoc(EXP = EXP, type = 'logistic', clinical = clin)
+#'
+#'
+methyl_Assoc <- function(EXP = EXP, type = c('logistic','survival','linear'), clinical = clin){
+>>>>>>> upstream/master:R/methyl_Assoc.R
     if (!requireNamespace("survival", quietly = TRUE)) {
         stop("Package \"survival\" needed for this function to work. Please install it.",
              call. = FALSE)

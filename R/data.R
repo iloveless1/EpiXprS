@@ -13,6 +13,7 @@
 #'
 "annotated_RNA"
 
+<<<<<<< HEAD
 
 
 
@@ -25,6 +26,8 @@
 #' @keywords data
 "TestData"
 
+=======
+>>>>>>> upstream/master
 #' BRCA_Methy_Test.
 #'
 #'

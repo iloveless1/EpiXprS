@@ -1,4 +1,8 @@
 .Rproj.user
 inst/doc
+<<<<<<< HEAD
 EpiXprS.Rproj
+=======
+EPIExPRS.Rproj
+>>>>>>> upstream/master
 .Rhistory
