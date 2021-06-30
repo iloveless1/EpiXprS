@@ -31,7 +31,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("EpiXprS")
 ```
 
-This will install this package and all missing dependencies.
+This will install the package and all missing dependencies.
 
 
 
@@ -39,18 +39,6 @@ This will install this package and all missing dependencies.
 library(EpiXprS)
 set.seed(1014)
 
-data("TestData", package = "EpiXprS")
-
-TestData@assays@data$TestData[1:5,1:5]
-
-TestData@colData
-```
-
-The main functionality of this package is to allow one to associate many CpG sites with gene expression, while accounting for possible race-specific effects. This is managed by including multiplicative interaction terms between race and CpG sites in a penalized regression model. The function `Construct()` 
-has three methods, `Specific` which constructs models that ignore possible race-specific effects, `Adjusted` where race is included in the model, and `Interaction` where the aforementioned multiplicative interaction terms are included as well. The function returns 1) the prediction model, 2) the cross-validated predicted expression, 3) the percent of variability explained, 4) & 5) the race specific variability
-explained for the `Adjusted` and `Interaction` model types, and 6) ensembl annotation for the genes modeled. 
-
-```{r methyl_Construct Demonstration}
 brca <- curatedTCGAData::curatedTCGAData("BRCA", c("RNASeqGene", "Methylation_methyl450"), dry.run=FALSE, version = '2.0.1') 
 brcamatched <- intersectColumns(brca)
 brcamatched <- brcamatched[,brcamatched$race %in% c('white','black or african american')]
@@ -60,6 +48,13 @@ Counts <- assays(brcamatched)$`BRCA_RNASeqGene-20160128`[c(1:2),substr(colnames(
 Methy <- Methy[,which(substr(colnames(Methy),1,16) %in% substr(colnames(Counts),1,16))]
 Counts <- Counts[,match(substr(colnames(Methy),1,16),substr(colnames(Counts),1,16))]
 coldat <- coldat[match(substr(colnames(Methy),1,12),coldat$patientID),]
+```
+
+The main functionality of this package is to allow one to associate many CpG sites with gene expression, while accounting for possible race-specific effects. This is managed by including multiplicative interaction terms between race and CpG sites in a penalized regression model. The function `Construct()` 
+has three methods, `Specific` which constructs models that ignore possible race-specific effects, `Adjusted` where race is included in the model, and `Interaction` where the aforementioned multiplicative interaction terms are included as well. The function returns 1) the prediction model, 2) the cross-validated predicted expression, 3) the percent of variability explained, 4) & 5) the race specific variability
+explained for the `Adjusted` and `Interaction` model types, and 6) ensembl annotation for the genes modeled. 
+
+```{r Construct Demonstration}
 out <- Construct(x = Methy[,1:100], y = Counts[,1:100], clinical = coldat$race[1:100],
                            method ='Interaction', dist = NULL, nfolds = NULL, 
                           impute = TRUE, beta = TRUE, parallel = FALSE,

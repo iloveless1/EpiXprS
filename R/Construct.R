@@ -72,8 +72,8 @@ Construct <- function(x = betas, y = counts, clinical = clin , method =
 
     Methy <- as.matrix(x)
 
-    annotated_RNA <- annotated_RNA[match(rownames(counts),
-                                         annotated_RNA$ensembl_id), ]
+    annotated_RNA <- Gene.Annotation[match(rownames(y),
+                                         Gene.Annotation$hgnc_symbol) ]
 
 
     Methylation.Annotation <- Methylation.Annotation[match(rownames(Methy),Methylation.Annotation$name) ]
@@ -97,7 +97,7 @@ Construct <- function(x = betas, y = counts, clinical = clin , method =
 
         tmp <- annotated_RNA[i ]
 
-        RNA_tmp <- counts[i, ]
+        RNA_tmp <- Counts[i, ]
 
         methy_tmp <- Methy[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist))]
 
@@ -121,8 +121,8 @@ Construct <- function(x = betas, y = counts, clinical = clin , method =
     } else {
         for(i in seq_len(nrow(annotated_RNA))){
             tmp <- annotated_RNA[i,]
-            RNA_tmp <- counts[,i]
-            methy_tmp <- methy[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist)),]
+            RNA_tmp <- Counts[,i]
+            methy_tmp <- Methy[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist)),]
             clin_tmp <- methy_clin[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist))]
             ###Complete Case Analysis
             data.whole <- cbind(as.matrix(t(methy_tmp)),clinical)
