@@ -1,3 +1,7 @@
-^EpiXprS\.Rproj$
+^EPIExPRS\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^Annotation_Granges$
+^Annotation_Granges/annotated_RNA\.rda$
+^Annotation_Granges/annotation_450k\.rda$
+^Annotation_Granges/annotation_EPIC\.rda$

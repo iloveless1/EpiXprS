@@ -4,7 +4,6 @@
 #' @import stringr
 #' @param features CpG sites to be identified in the model of choice
 #' @param Cancer ExperimentHub object cancer model
-#' @param type Feature type to search for0
 #' @return data.frame containing all instance of CpG sites in models.
 #' \code{CpG.site} The CpG site included in the model and if it has race specific effects
 #' \code{Weight} The weight of the CpG site on the expression of the gene
@@ -25,12 +24,13 @@
 #' ModelSearch('cg21837192', Cancer = Cancer)
 #'
 
-ModelSearch <- function(features, Cancer=object, type = c('CpG','Gene')){
+ModelSearch <- function(features, Cancer=object){
 
    
 all_list <- list()
 for(i in seq_len(length(Cancer))){
     if(length(which(substr(rownames(Cancer[[i]][[1]]),1,str_length(features[1])) %in% features)) >0){
+        if(length(unlist(Cancer[[i]][[2]]))>7){
         k  <- length(which(substr(rownames(Cancer[[i]][[1]]),1,str_length(features[1])) %in% features))
         out <- data.frame('CpG Site' = rownames(Cancer[[i]][[1]])[substr(rownames(Cancer[[i]][[1]]),1, 
                                         str_length(features[1])) %in% features],
@@ -47,9 +47,24 @@ for(i in seq_len(length(Cancer))){
                           
         all_list[[i]] <- out
         
-    } 
+        } else {
+            k  <- length(which(substr(rownames(Cancer[[i]][[1]]),1,str_length(features[1])) %in% features))
+            out <- data.frame('CpG Site' = rownames(Cancer[[i]][[1]])[substr(rownames(Cancer[[i]][[1]]),1, 
+                                                                             str_length(features[1])) %in% features],
+                              'Weight' = Cancer[[i]][[1]][substr(rownames(Cancer[[i]][[1]]),1, 
+                                                                 str_length(features[1])) %in% features,],
+                              'Ensembl ID' = rep(unlist(Cancer[[i]][[2]][2]),k),
+                              'Chromosome' = rep(unlist(Cancer[[i]][[2]][3]),k),
+                              'TSS' = rep(unlist(Cancer[[i]][[2]][4]),k),
+                              'TES' = rep(unlist(Cancer[[i]][[2]][5]),k),
+                              'Gene' = rep(unlist(Cancer[[i]][[2]][6]),k),
+                              'Overall D2' = rep(unlist(Cancer[[i]][[2]][7]),k))
+            all_list[[i]] <- out
+            
+    }
+    }
 }
 all <- do.call(rbind,all_list)
 
-return(data.frame(all, row.names = c(1:nrow(all))))
+return(data.frame(all, row.names = seq(nrow(all))))
 }

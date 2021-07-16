@@ -4,7 +4,7 @@
 \alias{Interact}
 \title{Function for associating race adjusted DNA methylation with matched mRNA expression}
 \usage{
-Interact(x, y, alpha, nfolds, clin.col)
+Interact(x, y, alpha, nfolds, clin)
 }
 \arguments{
 \item{x}{Processed DNA methylation with covariates. Race must be the final term}
@@ -15,19 +15,15 @@ Interact(x, y, alpha, nfolds, clin.col)
 
 \item{nfolds}{the number of folds to use for cross-validation}
 
-\item{clin.col}{the number of clinical covariates included}
+\item{clin}{a matrix of clinical covariates}
 }
 \value{
-<<<<<<< HEAD
 returns list of five elements for summarizing model construction.
 \code{Model} is the predicted model for the gene. \code{Predicted.Expression}
 is the Cross-validated predicted expression. \code{Overall.D2} The prediction
-accuracy for the interaction model. \code{Class1.D2} is the prediction accuracy
+accuracy for the interaction  model. \code{Class1.D2} is the prediction accuracy
 for the reference class. \code{Class2.D2} is the prediction accuracy for the
 non-reference class.
-=======
-returns list of five elements for summarizing model construction
->>>>>>> upstream/master
 }
 \description{
 This function allows one to associate DNA methylation with matched mRNA expression
@@ -35,14 +31,10 @@ in a multivariate context while adjusting for race. This function assumes
 that the variable 'race' is the final column in the matrix.
 }
 \examples{
-data.whole = cbind(matrix(rnorm(500),nrow=50),rbinom(50,1,0.5) ,rbinom(50,1,0.5))
+data("Testdat", package = 'EpiXprS')
+x = cbind(matrix(rnorm(500),nrow=50),rbinom(50,1,0.5) ,rbinom(50,1,0.5))
 colnames(data.whole) <- c(1:10,'sex','race')
-<<<<<<< HEAD
 RNA_idx <- rpois(50,15)
-Interact(data.whole, RNA_idx, alpha = 0.5, nfolds = 5, clin.col = 2)
-=======
-RNA_tmp <- rpois(50,15)
-Interact(data.whole, RNA_tmp, alpha = 0.5, nfolds = 5, clin.col = 2)
->>>>>>> upstream/master
+Interact(data.whole, RNA_idx, alpha = 0.5, nfolds = 5, clin = clinical)
 
 }

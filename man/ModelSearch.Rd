@@ -5,14 +5,12 @@
 \title{Allows user to search provided models for CpG sites that are associated with
 expression of genes in any of the cancer models.}
 \usage{
-ModelSearch(features, Cancer = object, type = c("CpG", "Gene"))
+ModelSearch(features, Cancer = object)
 }
 \arguments{
 \item{features}{CpG sites to be identified in the model of choice}
 
 \item{Cancer}{ExperimentHub object cancer model}
-
-\item{type}{Feature type to search for0}
 }
 \value{
 data.frame containing all instance of CpG sites in models.

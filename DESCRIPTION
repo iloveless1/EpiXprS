@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 Package: EpiXprS
-=======
-Package: methylXprs
->>>>>>> upstream/master
 Title: Associates DNA Methylation with Matched gene Expression
 Version: 0.99.4
 Authors@R: 
@@ -20,7 +16,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 biocViews: DNAMethylation, Microarray, Software, GeneExpression, 
-    GeneRegulation, Epigenetics
+    GeneRegulation, Epigenetics, GenePrediction
 Imports: 
     foreach,
     doParallel,
@@ -28,19 +24,16 @@ Imports:
     glmnet,
     stats,
     Repitools,
-<<<<<<< HEAD
     utils,
     stringr,
     AnnotationHub,
-    ExperimentHub
+    ExperimentHub,
+    MultiAssayExperiment,
+    SummarizedExperiment
 Suggests: 
     rmarkdown,
     knitr,
-    markdown
-=======
-    utils
-Suggests: 
-    rmarkdown,
-    knitr
->>>>>>> upstream/master
+    markdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

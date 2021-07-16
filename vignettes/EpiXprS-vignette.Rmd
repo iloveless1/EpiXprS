@@ -37,17 +37,17 @@ This will install the package and all missing dependencies.
 
 ```{r setup}
 library(EpiXprS)
+library(SummarizedExperiment)
 set.seed(1014)
 
-brca <- curatedTCGAData::curatedTCGAData("BRCA", c("RNASeqGene", "Methylation_methyl450"), dry.run=FALSE, version = '2.0.1') 
-brcamatched <- intersectColumns(brca)
-brcamatched <- brcamatched[,brcamatched$race %in% c('white','black or african american')]
-coldat <- as(colData(brcamatched),'data.frame')
-Methy <- assays(brcamatched)$`BRCA_Methylation_methyl450-20160128`[,substr(colnames(assays(brcamatched)$`BRCA_Methylation_methyl450-20160128`),14,15) == '01']
-Counts <- assays(brcamatched)$`BRCA_RNASeqGene-20160128`[c(1:2),substr(colnames(assays(brcamatched)$`BRCA_RNASeqGene-20160128`),14,15) == '01']
-Methy <- Methy[,which(substr(colnames(Methy),1,16) %in% substr(colnames(Counts),1,16))]
-Counts <- Counts[,match(substr(colnames(Methy),1,16),substr(colnames(Counts),1,16))]
-coldat <- coldat[match(substr(colnames(Methy),1,12),coldat$patientID),]
+data('Testdat',package = 'EpiXprS')
+Methy <- assays(Testdat)$Methyl
+Methy[1:5,1:5]
+Counts <- assays(Testdat)$RNASeqGene
+Counts[1:2,1:5]
+coldat <- colData(Testdat)
+coldat$race <- ifelse(coldat$race == 'white',1,0)
+head(coldat)
 ```
 
 The main functionality of this package is to allow one to associate many CpG sites with gene expression, while accounting for possible race-specific effects. This is managed by including multiplicative interaction terms between race and CpG sites in a penalized regression model. The function `Construct()` 
@@ -55,23 +55,23 @@ has three methods, `Specific` which constructs models that ignore possible race-
 explained for the `Adjusted` and `Interaction` model types, and 6) ensembl annotation for the genes modeled. 
 
 ```{r Construct Demonstration}
-out <- Construct(x = Methy[,1:100], y = Counts[,1:100], clinical = coldat$race[1:100],
+out <- Construct(Object = Testdat,
                            method ='Interaction', dist = NULL, nfolds = NULL, 
                           impute = TRUE, beta = TRUE, parallel = FALSE,
                  Methylation.Annotation = annotation_450k, Gene.Annotation = annotated_RNA)
 
-rbind(head(out[1,1][[1]][[1]]),tail(out[1,1][[1]][[1]]))
-head(out[1,2][[1]][[1]])
-out[1,3][[1]]
-out[1,4][[1]]
-out[1,5][[1]]
-out[1,6][[1]]
+rbind(head(out$Model),tail(out$Model))
+head(out$Predicted.Expression)
+out$Overall.D2
+out$Class1.D2
+out$Class2.D2
+out$Annotation
 ```
 
 Another useful function, `ModelSearch()`, allows one to search through pre-constructed models to identify gene models in which a given CpG site is included. It also provides functionality to search for specific genes to identify the CpG sites that are included its model. 
 
 
-```{r model_search, eval = FALSE}
+```{r ModelSearch, eval = FALSE}
 library(ExperimentHub)
 eh = ExperimentHub()
 x <- query(eh, 'EpiXprS')
