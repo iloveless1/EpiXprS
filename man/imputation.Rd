@@ -4,7 +4,11 @@
 \alias{imputation}
 \title{Imputation function for DNA methylation}
 \usage{
-imputation(methy = methy, dist = dist, methy_clin = methy_clin)
+imputation(
+  methy = methy,
+  dist = dist,
+  Methylation.Annotation = Methylation.Annotation
+)
 }
 \arguments{
 \item{methy}{is a matrix of methylation beta values with missing data}

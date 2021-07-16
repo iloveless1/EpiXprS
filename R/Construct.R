@@ -12,9 +12,11 @@
 #' @import Repitools
 #' @import doParallel
 #' @import AnnotationHub
-#' @param x matrix of DNA methylation beta values. Can include missing values
-#' @param y matrix of raw mRNA counts
-#' @param clinical Data.frame conataing clinical covariates
+#' @import ExperimentHub
+#' @import MultiAssayExperiment
+#' @import SummarizedExperiment
+#' @param Object an object of class Summarized Experiment containing paired 
+#' DNA methylation, RNA seq, and Clinical data. 
 #' @param parallel whether to run in parallel. Defaults to FALSE
 #' @param method method for multivariate associations
 #' @param dist the distance from the TSS & TES in Kb. Defaults to 1,000,000Kb
@@ -28,27 +30,29 @@
 #' @export Construct
 #'
 #' @examples
-#' data(BRCA_Methy_Test)
-#' data(BRCA_RNA_Test)
-#' data(BRCA_Clinical_Test)
-#' dim(BRCA_Methy_Test)
-#' BRCA_Methy_Test[1:5,1:5]
-#' dim(BRCA_Clinical_Test)
-#' head(BRCA_Clinical_Test)
-#' dim(BRCA_RNA_Test)
-#' BRCA_RNA_Test[1,1:5]
-#' Construct(x = BRCA_Methy_Test, y = BRCA_RNA_Test,
-#' clinical = BRCA_Clinical_Test, method = 'Interaction', beta = FALSE,
-#' impute = FALSE)
-#'
+#' data('Testdat',package = 'EpiXprS')
+#' Methy <- assays(Testdat)$Methyl450k
+#' Methy[1:5,1:5]
+#' Counts <- assays(Testdat)$RNASeqGene
+#' Counts[1:2,1:5]
+#' coldat <- colData(Testdat)
+#' coldat$race <- ifelse(coldat$race == 'white',1,0)
+#' head(coldat)
+#' Construct(x = Methy, y = Counts, clinical = coldat$race,
+#' method ='Interaction', dist = NULL, nfolds = NULL, 
+#' impute = TRUE, beta = TRUE, parallel = FALSE,
+#' Methylation.Annotation = annotation_450k, Gene.Annotation = annotated_RNA)
 
 
-Construct <- function(x = betas, y = counts, clinical = clin , method =
+Construct <- function(Object = Object, method =
                               c('Adjusted', 'Interaction', 'Specific'),
                           dist = NULL, nfolds = NULL, impute = TRUE,
                           beta = TRUE, parallel = FALSE, Methylation.Annotation = NULL,
                       Gene.Annotation = NULL){
-
+    if(class(Object) != "MultiAssayExperiment"){
+        stop("Object must be MultiAssayExperiment. Please use 'MakeEpiXprs'")
+    }
+    
     method = match.arg(method)
     if (!requireNamespace("glmnet", quietly = TRUE)) {
         stop("Package \"glmnet\" needed for this function to work. Please
@@ -70,9 +74,9 @@ Construct <- function(x = betas, y = counts, clinical = clin , method =
         nfolds = 10
     }
 
-    Methy <- as.matrix(x)
-
-    annotated_RNA <- Gene.Annotation[match(rownames(y),
+    Methy <- as.matrix(assays(Object)$Methyl)
+    y <- as.matrix(assays(Object)$RNASeqGene)
+    annotated_RNA <- Gene.Annotation[match(rownames(),
                                          Gene.Annotation$hgnc_symbol) ]
 
 
@@ -88,53 +92,37 @@ Construct <- function(x = betas, y = counts, clinical = clin , method =
     Methy <- log2(Methy) - log2(1 - Methy)
     }
     
+    ###Run twice because imputation removes some CpG sites
+    Methylation.Annotation <- Methylation.Annotation[match(rownames(Methy),Methylation.Annotation$name) ]
     
 
     if(isTRUE(parallel)){
-    r <- foreach(i=seq_along(nrow(annotated_RNA)), .combine=rbind, .errorhandling='pass',
+    r <- foreach(i=seq_along(length(annotated_RNA)), .combine=rbind, .errorhandling='pass',
                  .packages = c('glmnet')) %dopar% {
 
-
-        tmp <- annotated_RNA[i ]
-
-        RNA_tmp <- Counts[i, ]
-
-        methy_tmp <- Methy[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist))]
-
-         clin_tmp <- Methylation.Annotation[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist))]
-        ###Complete Case Analysis
-        data.whole <- cbind(as.matrix(t(methy_tmp)),clinical)
-        colnames(data.whole) <- c(colnames(as.matrix(t(methy_tmp))), colnames(clinical))
-        data.whole <- data.whole[, colSums(is.na(data.whole)) == 0]
-        ####Run Elastic Net
-        out = switch(method,
-                     "Adjusted"=Adjust(data.whole,RNA_tmp,0.5,nfolds,
-                                       ncol(clinical)),
-                     "Interaction"=Interact(data.whole,RNA_tmp,0.5,nfolds,
-                                            ncol(clinical)),
-                     "Specific"=Specific(data.whole,RNA_tmp,0.5,nfolds,
-                                       ncol(clinical))
+                     input <- prepare(y, Methy, Methylation.Annotation,annotated_RNA, idx = i,dist)
+                     out = switch(method,
+                                  "Adjusted"=Adjust(input$methy_tmp,input$RNA_tmp,0.5,nfolds,
+                                                    clin),
+                                  "Interaction"=Interact(input$methy_tmp,input$RNA_tmp,0.5,nfolds,
+                                                         clin),
+                                  "Specific"=Specific(input$methy_tmp,input$RNA_tmp,0.5,nfolds,
+                                                      clin)
                      )
         out[['Annotation']] <- annotated_RNA[i,]
                  }
     return(out)
     } else {
-        for(i in seq_len(nrow(annotated_RNA))){
-            tmp <- annotated_RNA[i,]
-            RNA_tmp <- Counts[,i]
-            methy_tmp <- Methy[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist)),]
-            clin_tmp <- methy_clin[(seqnames(Methylation.Annotation) == as.character(seqnames(tmp)))  & (end(Methylation.Annotation) <= (end(tmp) + dist)) & (start(Methylation.Annotation) >= (start(tmp) - dist))]
-            ###Complete Case Analysis
-            data.whole <- cbind(as.matrix(t(methy_tmp)),clinical)
-            colnames(data.whole) <- c(colnames(as.matrix(t(methy_tmp))), colnames(clinical))
-            data.whole <- data.whole[, colSums(is.na(data.whole)) == 0]
+        for(i in seq_len(length(annotated_RNA))){
+            
+            input <- prepare(y, Methy, Methylation.Annotation,annotated_RNA, idx = i, dist)
             out = switch(method,
-                         "Adjusted"=Adjust(data.whole,RNA_tmp,0.5,nfolds,
-                                           ncol(clinical)),
-                         "Interaction"=Interact(data.whole,RNA_tmp,0.5,nfolds,
-                                                ncol(clinical)),
-                         "Specific"=Specific(data.whole,RNA_tmp,0.5,nfolds,
-                                           ncol(clinical))
+                         "Adjusted"=Adjust(input$methy_tmp,input$RNA_tmp,0.5,nfolds,
+                                           clin),
+                         "Interaction"=Interact(input$methy_tmp,input$RNA_tmp,0.5,nfolds,
+                                                clin),
+                         "Specific"=Specific(input$methy_tmp,input$RNA_tmp,0.5,nfolds,
+                                           clin)
             )
             out[['Annotation']] <- annotated_RNA[i,]
         }

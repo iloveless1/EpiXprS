@@ -1,12 +1,35 @@
-#' Back end imputation methods for DNA Methylation
-#'
-#' Borrowed from the methyLImp package constructed by Pietro Di Lena
-#' @importFrom utils data
-#' @param min minimum value for imputation restriction
-#' @param max maximum value for imputation restriction
-#' @param x Methylation Values
-#' @return Matrix of imputed expression
 
+#' Imputation function for DNA methylation
+#'
+#' @param methy is a matrix of methylation beta values with missing data
+#' @param dist The distance to use for impuation model construction
+#' @param methy_clin The methlation annotation provided
+#' @return Methy Matrix with complete DNA methylation
+#' @export imputation
+
+imputation <- function(methy = methy, dist = dist, Methylation.Annotation = Methylation.Annotation){
+    missing <- rowSums(is.na(methy))
+    
+    for(i in seq_len(length(missing))){
+        tryCatch({
+            if(missing[i]==0) next()
+            
+            tmp <- Methylation.Annotation[i]
+            
+            impute <- Methy[(seqnames(Methylation.Annotation) == seqnames(tmp) & start(Methylation.Annotation)
+                             <= start(tmp) +dist) &
+                                (seqnames(Methylation.Annotation) == seqnames(tmp) & start(Methylation.Annotation)
+                                 >= start(tmp) - dist) ]
+            
+            impute <- impute[rowSums(is.na(impute)) == 0 | rownames(impute) %in% rownames(tmp), ]
+            
+            out <- Imputation(t(impute))
+            Methy[i,] <- out[ ,match(rownames(tmp),colnames(out))]
+        }, error=function(e){})
+    }
+    Methy <- ifelse(Methy == 1, 0.99, ifelse(Methy == 0, 0.01, Methy))
+    Methy <- Methy[rowSums(is.na(Methy)) == 0,]
+}
 
 #####Methylation Imputation Function
 
@@ -124,48 +147,3 @@ methyLImp <- function(dat, min = 0, max = 1, max.sv = NULL, col.list = NULL)
     return(out)
 }
 
-
-#' Imputation function for DNA methylation
-#'
-#' @param methy is a matrix of methylation beta values with missing data
-#' @param dist The distance to use for impuation model construction
-#' @param methy_clin The methlation annotation provided
-#' @return Methy Matrix with complete DNA methylation
-#' @export imputation
-
-<<<<<<< HEAD
-imputation <- function(methy = methy, dist = dist, Methylation.Annotation = Methylation.Annotation){
-=======
-imputation <- function(methy = methy, dist = dist, methy_clin = methy_clin){
->>>>>>> upstream/master
-missing <- rowSums(is.na(methy))
-
-for(i in seq_len(length(missing))){
-    tryCatch({
-        if(missing[i]==0) next()
-
-<<<<<<< HEAD
-        tmp <- Methylation.Annotation[i]
-
-        impute <- Methy[(seqnames(Methylation.Annotation) == seqnames(tmp) & start(Methylation.Annotation)
-                         <= start(tmp) +dist) &
-                            (seqnames(Methylation.Annotation) == seqnames(tmp) & start(Methylation.Annotation)
-                             >= start(tmp) -dist) ]
-=======
-        tmp <- methy_clin[i, ]
-
-        impute <- Methy[(methy_clin$chr == tmp$Chromosome & methy_clin$start
-                         <= tmp$Genomic_Coordinate+dist) &
-                            (methy_clin$chr == tmp$Chromosome &
-                                 methy_clin$start >= tmp$Genomic_Coordinate-dist), ]
->>>>>>> upstream/master
-
-        impute <- impute[rowSums(is.na(impute)) == 0 | rownames(impute) %in% rownames(tmp), ]
-
-        out <- Imputation(t(impute))
-        Methy[i,] <- out[ ,match(rownames(tmp),colnames(out))]
-    }, error=function(e){})
-}
-Methy <- ifelse(Methy == 1, 0.99, ifelse(Methy == 0, 0.01, Methy))
-Methy <- Methy[rowSums(is.na(Methy)) == 0,]
-}
