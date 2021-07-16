@@ -4,4 +4,4 @@ DNA methylation has been shown to be in important regulator of gene expression. 
 # Installation
 if (!requireNamespace("BiocManager", quietly = TRUE))  
     install.packages("BiocManager")  
-BiocManager::install("EpiXprS  
+BiocManager::install("EpiXprS")
